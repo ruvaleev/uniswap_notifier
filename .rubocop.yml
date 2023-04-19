@@ -1,0 +1,12 @@
+require:
+  - rubocop-rspec
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.2.2
+
+MultipleExpectations:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
