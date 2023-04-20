@@ -1,11 +1,18 @@
 require:
+  - rubocop-rake
   - rubocop-rspec
 
 AllCops:
   NewCops: enable
   TargetRubyVersion: 3.2.2
+  Exclude:
+    - db/schema.rb
+    - notes/*
 
 MultipleExpectations:
+  Enabled: false
+
+RSpec/Rails/InferredSpecType:
   Enabled: false
 
 Style/Documentation:

@@ -1,0 +1,19 @@
+development: &defaults
+  adapter: postgresql
+  encoding: unicode
+  database: position_watcher_dev
+  pool: 2
+  username: <%= ENV['DB_USER'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
+
+test:
+  <<: *defaults
+  database: position_watcher_test
+
+production:
+  <<: *defaults
+  adapter: postgresql
+  database: <%= ENV['DB_NAME'] %>
+  username: <%= ENV['DB_USER'] %>
+  password: <%= ENV['DB_PASSWORD'] %>

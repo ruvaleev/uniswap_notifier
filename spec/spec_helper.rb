@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
-require 'pry'
-require 'rspec'
+ENV['SINATRA_ENV'] = 'test'
+
+require './config/environment'
+require './coin_gecko_client'
+
 require 'webmock/rspec'
 
-require './coin_gecko_client'
+require_all 'spec/support'
