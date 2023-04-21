@@ -9,8 +9,14 @@ AllCops:
     - db/schema.rb
     - notes/*
 
+Layout/LineLength:
+  Max: 120
+
 MultipleExpectations:
   Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Max: 10
 
 RSpec/Rails/InferredSpecType:
   Enabled: false

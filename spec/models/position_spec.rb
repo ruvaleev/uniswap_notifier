@@ -29,15 +29,22 @@ RSpec.describe Position, type: :model do
 
     let(:currency1) { create(:currency, usd_price: 10) }
     let(:currency2) { create(:currency, usd_price: 20) }
+    let(:currency_with_unknown_price) { create(:currency, usd_price: nil) }
     let(:common_position_params) do
       { rebalance_threshold_percents: 10, from_currency: currency1, to_currency: currency2 }
     end
     let!(:object_with_too_low_price) { create(:position, **common_position_params, min_price: 0.45, max_price: 0.6) }
     let!(:object_with_too_high_price) { create(:position, **common_position_params, min_price: 0.35, max_price: 0.55) }
     let(:object_with_normal_price) { create(:position, **common_position_params, min_price: 0.449, max_price: 0.551) }
+    let(:unknown_price_params) { common_position_params.merge(to_currency: currency_with_unknown_price) }
+    let(:object_with_unknown_price) { create(:position, **unknown_price_params, min_price: 0.45, max_price: 0.6) }
 
-    before { object_with_normal_price }
+    before do
+      object_with_normal_price
+      object_with_unknown_price
+    end
 
+    it { is_expected.to be_an(ActiveRecord::Relation) }
     it { is_expected.to match_array([object_with_too_low_price, object_with_too_high_price]) }
   end
 end
