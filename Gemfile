@@ -21,7 +21,10 @@ group :development, :test do
 end
 
 group :test do
+  gem 'database_cleaner-active_record'
+  gem 'factory_bot'
   gem 'rspec'
+  gem 'securerandom'
   gem 'shoulda-matchers'
   gem 'webmock'
 end

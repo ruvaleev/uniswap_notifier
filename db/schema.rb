@@ -10,15 +10,32 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_20_151249) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_21_121411) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "currencies", force: :cascade do |t|
     t.string "code", null: false
+    t.decimal "usd_price"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["code"], name: "index_currencies_on_code", unique: true
   end
 
+  create_table "positions", force: :cascade do |t|
+    t.bigint "from_currency_id", null: false
+    t.bigint "to_currency_id", null: false
+    t.decimal "max_price", null: false
+    t.decimal "min_price", null: false
+    t.integer "notification_status", default: 0, null: false
+    t.integer "rebalance_threshold_percents", default: 0, null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["from_currency_id"], name: "index_positions_on_from_currency_id"
+    t.index ["to_currency_id"], name: "index_positions_on_to_currency_id"
+  end
+
+  add_foreign_key "positions", "currencies", column: "from_currency_id"
+  add_foreign_key "positions", "currencies", column: "to_currency_id"
 end
