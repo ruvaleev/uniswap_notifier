@@ -2,3 +2,5 @@
 .rspec
 
 /notes
+
+secrets.yml

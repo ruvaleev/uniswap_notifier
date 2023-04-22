@@ -9,6 +9,7 @@ gem 'rake'
 gem 'require_all'
 gem 'sinatra-activerecord'
 gem 'strong_migrations'
+gem 'telegram-bot-ruby'
 
 group :development do
   gem 'database_consistency', require: false
