@@ -2,6 +2,7 @@
 
 FactoryBot.define do
   factory :position do
+    association :user
     association :from_currency, factory: :currency
     association :to_currency, factory: :currency
     max_price { rand(1..100) }

@@ -12,8 +12,15 @@ AllCops:
 Layout/LineLength:
   Max: 120
 
+Metrics/MethodLength:
+  Exclude:
+    - db/migrate/*
+
 MultipleExpectations:
   Enabled: false
+
+RSpec/ExampleLength:
+  Max: 10
 
 RSpec/MultipleMemoizedHelpers:
   Max: 10

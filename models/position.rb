@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Position < ActiveRecord::Base
+  belongs_to :user
   belongs_to :from_currency, class_name: :Currency, inverse_of: :from_positions, foreign_key: :from_currency_id
   belongs_to :to_currency, class_name: :Currency, inverse_of: :to_positions, foreign_key: :to_currency_id
 
@@ -11,6 +12,7 @@ class Position < ActiveRecord::Base
             :rebalance_threshold_percents,
             :status,
             :to_currency_id,
+            :user_id,
             presence: true
 
   validates_numericality_of :rebalance_threshold_percents, less_than_or_equal_to: 50

@@ -3,6 +3,7 @@
 class CreatePositions < ActiveRecord::Migration[7.0]
   def change
     create_table :positions do |t|
+      t.references :user, null: false, foreign_key: true
       t.references :from_currency, null: false, foreign_key: { to_table: :currencies }
       t.references :to_currency, null: false, foreign_key: { to_table: :currencies }
       t.decimal :max_price, null: false

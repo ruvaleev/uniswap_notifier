@@ -23,6 +23,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_21_121411) do
   end
 
   create_table "positions", force: :cascade do |t|
+    t.bigint "user_id", null: false
     t.bigint "from_currency_id", null: false
     t.bigint "to_currency_id", null: false
     t.decimal "max_price", null: false
@@ -34,8 +35,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_21_121411) do
     t.datetime "updated_at", null: false
     t.index ["from_currency_id"], name: "index_positions_on_from_currency_id"
     t.index ["to_currency_id"], name: "index_positions_on_to_currency_id"
+    t.index ["user_id"], name: "index_positions_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "login", null: false
+    t.string "password_hash", null: false
+    t.string "telegram_chat_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["login"], name: "index_users_on_login", unique: true
   end
 
   add_foreign_key "positions", "currencies", column: "from_currency_id"
   add_foreign_key "positions", "currencies", column: "to_currency_id"
+  add_foreign_key "positions", "users"
 end

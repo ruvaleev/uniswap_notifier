@@ -5,6 +5,8 @@ require './spec/spec_helper'
 RSpec.describe Position, type: :model do
   subject(:position) { build(:position) }
 
+  it { is_expected.to belong_to(:user) }
+
   it {
     expect(position).to belong_to(:from_currency)
       .class_name(:Currency).with_foreign_key(:from_currency_id).inverse_of(:from_positions)
@@ -23,6 +25,7 @@ RSpec.describe Position, type: :model do
   it { is_expected.to validate_numericality_of(:rebalance_threshold_percents).is_less_than_or_equal_to(50) }
   it { is_expected.to validate_presence_of(:status) }
   it { is_expected.to validate_presence_of(:to_currency_id) }
+  it { is_expected.to validate_presence_of(:user_id) }
 
   describe '.to_rebalance' do
     subject(:to_rebalance) { described_class.to_rebalance }
