@@ -25,7 +25,6 @@ module CoinGecko
         'gmx' => 'gmx',
         'link' => 'chainlink',
         'ltc' => 'litecoin',
-        'matic' => 'polygon',
         'sol' => 'solana',
         'trx' => 'tron',
         'uni' => 'uniswap',

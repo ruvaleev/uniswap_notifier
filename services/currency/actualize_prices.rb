@@ -10,7 +10,7 @@ class Currency::ActualizePrices # rubocop:disable Style/ClassAndModuleChildren
   private
 
   def update_currencies(actual_prices)
-    values_list = coingecko_ids.map { |key, v| "(#{key}, #{actual_prices[v]})" }.join(', ')
+    values_list = coingecko_ids.map { |key, v| "(#{key}, #{actual_prices[v] || 'NULL'})" }.join(', ')
 
     sql = <<~SQL.squish
       UPDATE currencies

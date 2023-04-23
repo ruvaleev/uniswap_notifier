@@ -46,6 +46,8 @@ GEM
       dry-inflector (~> 1.0)
       dry-logic (~> 1.4)
       zeitwerk (~> 2.6)
+    et-orbi (1.2.7)
+      tzinfo
     factory_bot (6.2.1)
       activesupport (>= 5.0.0)
     faraday (2.7.4)
@@ -54,6 +56,9 @@ GEM
     faraday-multipart (1.0.4)
       multipart-post (~> 2)
     faraday-net_http (3.0.2)
+    fugit (1.8.1)
+      et-orbi (~> 1, >= 1.2.7)
+      raabro (~> 1.4)
     hashdiff (1.0.1)
     httparty (0.15.7)
       multi_xml (>= 0.5.2)
@@ -75,11 +80,14 @@ GEM
       coderay (~> 1.1)
       method_source (~> 1.0)
     public_suffix (5.0.1)
+    raabro (1.4.0)
     rack (2.2.6.4)
     rack-protection (3.0.6)
       rack
     rainbow (3.1.1)
     rake (13.0.6)
+    redis (5.0.6)
+      redis-client (>= 0.9.0)
     redis-client (0.14.1)
       connection_pool
     regexp_parser (2.7.0)
@@ -122,6 +130,8 @@ GEM
       rubocop-capybara (~> 2.17)
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
+    rufus-scheduler (3.8.2)
+      fugit (~> 1.1, >= 1.1.6)
     securerandom (0.2.2)
     shoulda-matchers (5.3.0)
       activesupport (>= 5.2.0)
@@ -130,6 +140,10 @@ GEM
       connection_pool (>= 2.3.0)
       rack (>= 2.2.4)
       redis-client (>= 0.11.0)
+    sidekiq-scheduler (5.0.2)
+      rufus-scheduler (~> 3.2)
+      sidekiq (>= 6, < 8)
+      tilt (>= 1.4.0)
     sinatra (3.0.6)
       mustermann (~> 3.0)
       rack (~> 2.2, >= 2.2.4)
@@ -167,6 +181,7 @@ DEPENDENCIES
   pg
   pry
   rake
+  redis
   require_all
   rspec
   rspec-sqlimit
@@ -176,6 +191,7 @@ DEPENDENCIES
   securerandom
   shoulda-matchers
   sidekiq
+  sidekiq-scheduler
   sinatra-activerecord
   strong_migrations
   telegram-bot-ruby

@@ -2,7 +2,7 @@ development: &defaults
   adapter: postgresql
   encoding: unicode
   database: position_watcher_dev
-  pool: 2
+  pool: 5
   username: <%= ENV['DB_USER'] %>
   password: <%= ENV['DB_PASSWORD'] %>
   url: <%= ENV['DATABASE_URL'] %>
