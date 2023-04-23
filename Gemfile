@@ -26,6 +26,7 @@ group :test do
   gem 'database_cleaner-active_record'
   gem 'factory_bot'
   gem 'rspec'
+  gem 'rspec-sqlimit'
   gem 'securerandom'
   gem 'shoulda-matchers'
   gem 'webmock'
