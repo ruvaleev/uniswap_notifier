@@ -41,4 +41,8 @@ class Position < ActiveRecord::Base
       SQL
     )
   }
+
+  def current_position_price
+    from_currency.usd_price / to_currency.usd_price
+  end
 end

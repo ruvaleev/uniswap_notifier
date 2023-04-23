@@ -52,4 +52,14 @@ RSpec.describe Position, type: :model do
     it { is_expected.to be_an(ActiveRecord::Relation) }
     it { is_expected.to match_array([object_with_too_low_price, object_with_too_high_price]) }
   end
+
+  describe '#current_position_price' do
+    subject(:current_position_price) { position.current_position_price }
+
+    let(:position) { build(:position, from_currency:, to_currency:) }
+    let(:from_currency) { build(:currency, usd_price: 45) }
+    let(:to_currency) { build(:currency, usd_price: 100) }
+
+    it { is_expected.to eq(0.45) }
+  end
 end

@@ -14,6 +14,8 @@ class TelegramNotifier
   end
 
   def call
+    return if position.notified?
+
     self.class.client.api.send_message(
       chat_id: position.user.telegram_chat_id,
       text: needs_rebalancing_message(position)

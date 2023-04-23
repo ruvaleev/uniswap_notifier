@@ -10,6 +10,8 @@ config = YAML.load_file('secrets.yml')[ENV.fetch('SINATRA_ENV', nil)] if File.fi
 config&.each { |name, value| ENV[name] ||= value }
 ActiveRecord::Base.establish_connection(ENV['DATABASE_URL']) if ENV['DATABASE_URL']
 
+require_all 'config/initializers'
+require './app'
 require_all 'models'
 require_all 'services'
 require_all 'workers'

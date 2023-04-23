@@ -2,8 +2,4 @@
 
 require './config/environment'
 
-class App < Sinatra::Base
-  def call(_env)
-    200
-  end
-end
+run App
