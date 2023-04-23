@@ -29,14 +29,15 @@ class Position < ActiveRecord::Base
         LATERAL(
           SELECT
             from_currencies.usd_price / to_currencies.usd_price AS price,
-            (from_currencies.usd_price / to_currencies.usd_price / 100) * positions.rebalance_threshold_percents
+            positions.max_price - positions.min_price AS position_range_size,
+            ((positions.max_price - positions.min_price) / 100) * positions.rebalance_threshold_percents
               AS threshold_value
         ) AS t1
       SQL
     ).where(
       <<-SQL.squish
-        (price - threshold_value) <= positions.min_price OR
-        (price + threshold_value) >= positions.max_price
+        price <= (positions.min_price + threshold_value) OR
+        price >= (positions.max_price - threshold_value)
       SQL
     )
   }

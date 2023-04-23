@@ -36,11 +36,13 @@ RSpec.describe Position, type: :model do
     let(:common_position_params) do
       { rebalance_threshold_percents: 10, from_currency: currency1, to_currency: currency2 }
     end
-    let!(:object_with_too_low_price) { create(:position, **common_position_params, min_price: 0.45, max_price: 0.6) }
-    let!(:object_with_too_high_price) { create(:position, **common_position_params, min_price: 0.35, max_price: 0.55) }
-    let(:object_with_normal_price) { create(:position, **common_position_params, min_price: 0.449, max_price: 0.551) }
+    let!(:object_with_too_low_price) { create(:position, **common_position_params, min_price: 0.49, max_price: 0.59) }
+    let!(:object_with_too_high_price) do
+      create(:position, **common_position_params, min_price: 0.455, max_price: 0.505)
+    end
+    let(:object_with_normal_price) { create(:position, **common_position_params, min_price: 0.489, max_price: 0.51) }
     let(:unknown_price_params) { common_position_params.merge(to_currency: currency_with_unknown_price) }
-    let(:object_with_unknown_price) { create(:position, **unknown_price_params, min_price: 0.45, max_price: 0.6) }
+    let(:object_with_unknown_price) { create(:position, **unknown_price_params, min_price: 0.49, max_price: 0.59) }
 
     before do
       object_with_normal_price
