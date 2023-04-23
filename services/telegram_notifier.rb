@@ -18,6 +18,7 @@ class TelegramNotifier
       chat_id: position.user.telegram_chat_id,
       text: needs_rebalancing_message(position)
     )
+    position.notified!
   end
 
   private
