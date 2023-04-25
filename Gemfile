@@ -3,7 +3,8 @@
 source 'https://rubygems.org'
 
 gem 'bcrypt'
-gem 'httparty'
+gem 'bundle-audit'
+gem 'httparty', '>= 0.21.0'
 gem 'pg'
 gem 'rake'
 gem 'redis'
