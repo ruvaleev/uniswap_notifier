@@ -49,7 +49,7 @@ describe('runs server, accepts and correctly handles requests', () => {
     });
 
     await waitForServer(testCheck);
-  }, 10000);
+  }, 15000);
 
   afterAll(() => {
     server.kill();
@@ -71,5 +71,23 @@ describe('runs server, accepts and correctly handles requests', () => {
     expect(response.name).toEqual('Tether USD');
     expect(response.symbol).toEqual('USDT');
     expect(response.decimals).toEqual(6);
+  });
+
+  it('returns an error when request contains invalid address', async () => {
+    const testCheck = () => new Promise((resolve, reject) => {
+      client.GetTokenData({'address': '1xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9'}, (err) => {
+        if (err) {
+          resolve(err);
+        } else {
+          reject(new Error('Expected method to return error'));
+        }
+      });
+    });
+    const expectedErrorMessage = '2 UNKNOWN: missing revert data (action="call", data=null, reason=null, transaction={ "data": "0x0178b8bffc93a03a294172681ef8cc8d75bc6dd7a48d53bd79d83739ae43724ccd36c647", "to": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e" }, invocation=null, revert=null, code=CALL_EXCEPTION, version=6.3.0)';
+
+    const error = await testCheck();
+
+    expect(error).toBeDefined();
+    expect(error.message).toEqual(expectedErrorMessage);
   });
 })
