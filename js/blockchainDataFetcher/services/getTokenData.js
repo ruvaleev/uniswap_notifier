@@ -5,8 +5,6 @@ const { ethers } = require('ethers');
 const getTokenData = async (contractAddress) => {
   const provider = new ethers.JsonRpcProvider(process.env.INFURA_PROVIDER_URL);
 
-  // console.log(provider)
-
   const abi = [
     'function name() view returns (string)',
     'function symbol() view returns (string)',

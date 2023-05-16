@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+service BlockchainDataFetcher {
+  rpc GetTokenData (TokenRequest) returns (TokenResponse) {}
+}
+
+message TokenRequest {
+  string address = 1;
+}
+
+message TokenResponse {
+  string name = 1;
+  string symbol = 2;
+  int32 decimals = 3;
+}
