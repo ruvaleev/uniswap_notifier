@@ -22,7 +22,7 @@ jobs:
       - name: yarn test
         env:
           INFURA_PROVIDER_URL: https://arbitrum-mainnet.infura.io/some_provider_url
-        run: yarn test
+        run: yarn test:units
         working-directory: js/blockchainDataFetcher
       - name: Run ESLint
         run: yarn eslint .

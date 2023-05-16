@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "test:units": "jest \"^(?!.*\\.e2e\\.).*\"",
     "eslint": "eslint ."
   },
   "keywords": [],
