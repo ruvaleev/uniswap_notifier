@@ -4,9 +4,11 @@ const protoLoader = require('@grpc/proto-loader');
 const server = require('../server');
 const { getTokenData } = require('../services/getTokenData');
 const { getPositionData } = require('../services/getPositionData');
+const { getPoolState } = require('../services/getPoolState');
 
 jest.mock('../services/getTokenData');
 jest.mock('../services/getPositionData');
+jest.mock('../services/getPoolState');
 
 const PROTO_PATH = '../../protos/blockchain_data_fetcher.proto';
 
@@ -100,6 +102,70 @@ describe('BlockchainDataFetcher service', () => {
       client.GetPositionData({ id: 'invalid' }, (error) => {
         expect(error).toBeInstanceOf(Error);
         expect(error.message).toEqual('2 UNKNOWN: Invalid position id');
+        done();
+      });
+    });
+  })
+
+  describe('GetPoolState', () => {
+    const token0 = {
+      address: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
+      decimals: 18,
+      symbol: 'WETH',
+      name: 'Wrapped Ether'
+    }
+    const token1 = {
+      address: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
+      decimals: 6,
+      symbol: 'USDC',
+      name: 'USD Coin (Arb1)'
+    }
+    const input = {
+      chainId: 42161,
+      token0: token0,
+      token1: token1,
+      fee: 3000,
+      tickLower: -201960,
+      tickUpper: -188100,
+      positionLiquidity: '176562249908'
+    }
+
+    // eslint-disable-next-line jest/no-done-callback
+    it('returns correct position data', (done) => {
+      const mockPoolState = {
+        token0: {
+          address: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
+          decimals: 18,
+          symbol: 'WETH',
+          name: 'Wrapped Ether',
+          amount: '0.002023054661504617',
+          price: '1795.27',
+        },
+        token1: {
+          address: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
+          decimals: 6,
+          symbol: 'USDC',
+          name: 'USD Coin (Arb1)',
+          amount: '0.209753',
+          price: '0.000557021',
+        }
+      };
+
+      getPoolState.mockResolvedValue(mockPoolState);
+
+      client.GetPoolState(input, (error, response) => {
+        expect(response).toEqual(mockPoolState);
+        done();
+      });
+    });
+
+    // eslint-disable-next-line jest/no-done-callback
+    it('throws error for invalid inputData', (done) => {
+      getPoolState.mockRejectedValue(new Error('Invalid input data'));
+
+      client.GetPoolState({...input, chainId: 0}, (error) => {
+        expect(error).toBeInstanceOf(Error);
+        expect(error.message).toEqual('2 UNKNOWN: Invalid input data');
         done();
       });
     });

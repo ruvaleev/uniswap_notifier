@@ -3,6 +3,7 @@ const grpc = require('@grpc/grpc-js');
 
 const { getTokenData } = require('./services/getTokenData')
 const { getPositionData } = require('./services/getPositionData')
+const { getPoolState } = require('./services/getPoolState')
 
 const PROTO_PATH = '../../protos/blockchain_data_fetcher.proto';
 
@@ -31,6 +32,15 @@ server.addService(BlockchainDataFetcher.service, {
     try {
       const positionData = await getPositionData(id);
       callback(null, positionData);
+    } catch (error) {
+      callback(error);
+    }
+  },
+  GetPoolState: async (call, callback) => {
+    const { chainId, token0, token1, fee, tickLower, tickUpper, positionLiquidity } = call.request;
+    try {
+      const poolState = await getPoolState(chainId, token0, token1, fee, tickLower, tickUpper, positionLiquidity);
+      callback(null, poolState);
     } catch (error) {
       callback(error);
     }
