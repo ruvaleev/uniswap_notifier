@@ -2,6 +2,7 @@ syntax = "proto3";
 
 service BlockchainDataFetcher {
   rpc GetTokenData (TokenRequest) returns (TokenResponse) {}
+  rpc GetPositionData (PositionRequest) returns (PositionResponse) {}
 }
 
 message TokenRequest {
@@ -12,4 +13,17 @@ message TokenResponse {
   string name = 1;
   string symbol = 2;
   int32 decimals = 3;
+}
+
+message PositionRequest {
+  string id = 1;
+}
+
+message PositionResponse {
+  string token0 = 1;
+  string token1 = 2;
+  int32 fee = 3;
+  int32 tickLower = 4;
+  int32 tickUpper = 5;
+  string liquidity = 6;
 }

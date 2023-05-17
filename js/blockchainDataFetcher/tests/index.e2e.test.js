@@ -55,39 +55,81 @@ describe('runs server, accepts and correctly handles requests', () => {
     server.kill();
   });
 
-  it('returns proper response when request contains valid address', async () => {
-    const testCheck = () => new Promise((resolve, reject) => {
-      client.GetTokenData({'address': '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9'}, (err, response) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(response);
-        }
+  describe('GetTokenData', () => {
+    it('returns proper response when request contains valid address', async () => {
+      const testCheck = () => new Promise((resolve, reject) => {
+        client.GetTokenData({'address': '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9'}, (err, response) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(response);
+          }
+        });
       });
+
+      const response = await testCheck();
+
+      expect(response.name).toEqual('Tether USD');
+      expect(response.symbol).toEqual('USDT');
+      expect(response.decimals).toEqual(6);
     });
 
-    const response = await testCheck();
+    it('returns an error when request contains invalid address', async () => {
+      const testCheck = () => new Promise((resolve, reject) => {
+        client.GetTokenData({'address': '1xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9'}, (err) => {
+          if (err) {
+            resolve(err);
+          } else {
+            reject(new Error('Expected method to return error'));
+          }
+        });
+      });
+      const expectedErrorMessage = '2 UNKNOWN: missing revert data (action="call", data=null, reason=null, transaction={ "data": "0x0178b8bffc93a03a294172681ef8cc8d75bc6dd7a48d53bd79d83739ae43724ccd36c647", "to": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e" }, invocation=null, revert=null, code=CALL_EXCEPTION, version=6.3.0)';
 
-    expect(response.name).toEqual('Tether USD');
-    expect(response.symbol).toEqual('USDT');
-    expect(response.decimals).toEqual(6);
+      const error = await testCheck();
+
+      expect(error).toBeDefined();
+      expect(error.message).toEqual(expectedErrorMessage);
+    });
   });
 
-  it('returns an error when request contains invalid address', async () => {
-    const testCheck = () => new Promise((resolve, reject) => {
-      client.GetTokenData({'address': '1xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9'}, (err) => {
-        if (err) {
-          resolve(err);
-        } else {
-          reject(new Error('Expected method to return error'));
-        }
+  describe('GetPositionData', () => {
+    it('returns proper response when request contains valid id', async () => {
+      const testCheck = () => new Promise((resolve, reject) => {
+        client.GetPositionData({'id': 1000}, (err, response) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(response);
+          }
+        });
       });
+
+      const response = await testCheck();
+
+      expect(response.token0).toEqual('0x82aF49447D8a07e3bd95BD0d56f35241523fBab1');
+      expect(response.token1).toEqual('0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8');
+      expect(response.fee).toEqual(3000);
+      expect(response.tickLower).toEqual(-201960);
+      expect(response.tickUpper).toEqual(-188100);
+      expect(response.liquidity).toEqual('176562249908');
     });
-    const expectedErrorMessage = '2 UNKNOWN: missing revert data (action="call", data=null, reason=null, transaction={ "data": "0x0178b8bffc93a03a294172681ef8cc8d75bc6dd7a48d53bd79d83739ae43724ccd36c647", "to": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e" }, invocation=null, revert=null, code=CALL_EXCEPTION, version=6.3.0)';
 
-    const error = await testCheck();
+    it('returns an error when request contains invalid id', async () => {
+      const testCheck = () => new Promise((resolve, reject) => {
+        client.GetPositionData({'id': 0}, (err) => {
+          if (err) {
+            resolve(err);
+          } else {
+            reject(new Error('Expected method to return error'));
+          }
+        });
+      });
+      const expectedErrorMessage = '2 UNKNOWN: execution reverted: "Invalid token ID" (action="call", data="0x08c379a000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000010496e76616c696420746f6b656e20494400000000000000000000000000000000", reason="Invalid token ID", transaction={ "data": "0x99fbab880000000000000000000000000000000000000000000000000000000000000000", "to": "0xC36442b4a4522E871399CD717aBDD847Ab11FE88" }, invocation=null, revert={ "args": [ "Invalid token ID" ], "name": "Error", "signature": "Error(string)" }, code=CALL_EXCEPTION, version=6.3.0)'
+      const error = await testCheck();
 
-    expect(error).toBeDefined();
-    expect(error.message).toEqual(expectedErrorMessage);
+      expect(error).toBeDefined();
+      expect(error.message).toEqual(expectedErrorMessage);
+    });
   });
 })
