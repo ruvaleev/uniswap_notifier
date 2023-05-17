@@ -84,7 +84,8 @@ describe('BlockchainDataFetcher service', () => {
         fee: 3000,
         tickLower: -201960,
         tickUpper: -188100,
-        liquidity: '176562249908'
+        liquidity: '176562249908',
+        poolAddress: '0x17c14D2c404D167802b16C450d3c99F88F2c4F4d'
       };
 
       getPositionData.mockResolvedValue(mockPositionData);
@@ -127,7 +128,8 @@ describe('BlockchainDataFetcher service', () => {
       fee: 3000,
       tickLower: -201960,
       tickUpper: -188100,
-      positionLiquidity: '176562249908'
+      positionLiquidity: '176562249908',
+      poolAddress: '0x17c14D2c404D167802b16C450d3c99F88F2c4F4d'
     }
 
     // eslint-disable-next-line jest/no-done-callback

@@ -4,12 +4,11 @@ const { Pool, Position } = require('@uniswap/v3-sdk');
 require('dotenv').config();
 
 const poolAbi = require('./poolAbi.json')
-const factoryAbi = require('./factoryAbi.json')
 
 const provider = new ethers.JsonRpcProvider(process.env.INFURA_PROVIDER_URL);
 
-async function getPoolState(chainId, token0, token1, fee, tickLower, tickUpper, positionLiquidity) {
-  const pool = await getPool(chainId, token0, token1, fee)
+async function getPoolState(poolAddress, chainId, token0, token1, fee, tickLower, tickUpper, positionLiquidity) {
+  const pool = await getPool(poolAddress, chainId, token0, token1, fee)
   const position = new Position({ pool, tickLower: tickLower, tickUpper: tickUpper, liquidity: positionLiquidity })
 
   return {
@@ -26,8 +25,8 @@ async function getPoolState(chainId, token0, token1, fee, tickLower, tickUpper, 
   }
 }
 
-async function getPool(chainId, token0, token1, fee) {
-  const poolContract = await getPoolContract(token0.address, token1.address, fee)
+async function getPool(poolAddress, chainId, token0, token1, fee) {
+  const poolContract = new ethers.Contract(poolAddress, poolAbi, provider);
   const [liquidity, slot] = await Promise.all([poolContract.liquidity(), poolContract.slot0()]);
   const state = {
     liquidity: liquidity,
@@ -42,13 +41,6 @@ async function getPool(chainId, token0, token1, fee) {
     state
   )
 }
-
-async function getPoolContract(token0Address, token1Address, fee) {
-  const factoryAddress = '0x1F98431c8aD98523631AE4a59f267346ea31F984';
-  const factory = new ethers.Contract(factoryAddress, factoryAbi, provider);
-  const poolAddress = await factory.getPool(token0Address, token1Address, fee);
-  return new ethers.Contract(poolAddress, poolAbi, provider);
-};
 
 function buildPool(token0, token1, fee, state) {
   return new Pool(

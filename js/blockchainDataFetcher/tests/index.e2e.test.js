@@ -113,6 +113,7 @@ describe('runs server, accepts and correctly handles requests', () => {
       expect(response.tickLower).toEqual(-201960);
       expect(response.tickUpper).toEqual(-188100);
       expect(response.liquidity).toEqual('176562249908');
+      expect(response.poolAddress).toEqual('0x17c14D2c404D167802b16C450d3c99F88F2c4F4d');
     });
 
     it('returns an error when request contains invalid id', async () => {
@@ -155,6 +156,7 @@ describe('runs server, accepts and correctly handles requests', () => {
 
     it('returns proper response when request contains valid inputData', async () => {
       const inputData = {
+        poolAddress: '0x17c14D2c404D167802b16C450d3c99F88F2c4F4d',
         chainId: 42161,
         token0: token0,
         token1: token1,
@@ -186,6 +188,7 @@ describe('runs server, accepts and correctly handles requests', () => {
 
     it('returns an error when request contains invalid inputData', async () => {
       const inputData = {
+        poolAddress: '0x17c14D2c404D167802b16C450d3c99F88F2c4F4d',
         chainId: 42161,
         token0: invalidToken,
         token1: token1,
@@ -204,7 +207,7 @@ describe('runs server, accepts and correctly handles requests', () => {
           }
         });
       });
-      const expectedErrorMessage = '2 UNKNOWN: missing revert data (action="call", data=null, reason=null, transaction={ "data": "0x0178b8bf1e92c1e86e664df518fcc0ddf10f4af1e06a6d01e429d2738bd28aedfe1cd741", "to": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e" }, invocation=null, revert=null, code=CALL_EXCEPTION, version=6.3.0)'
+      const expectedErrorMessage = '2 UNKNOWN: 1x82aF49447D8a07e3bd95BD0d56f35241523fBab1 is not a valid address.'
       const error = await testCheck();
 
       expect(error).toBeDefined();

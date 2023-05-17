@@ -27,6 +27,7 @@ message PositionResponse {
   int32 tickLower = 4;
   int32 tickUpper = 5;
   string liquidity = 6;
+  string poolAddress = 7;
 }
 
 message PoolStateRequest {
@@ -37,13 +38,14 @@ message PoolStateRequest {
     string name = 4;
   }
 
-  int32 chainId = 1;
-  Token token0 = 2;
-  Token token1 = 3;
-  int32 fee = 4;
-  int32 tickLower = 5;
-  int32 tickUpper = 6;
-  string positionLiquidity = 7;
+  string poolAddress = 1;
+  int32 chainId = 2;
+  Token token0 = 3;
+  Token token1 = 4;
+  int32 fee = 5;
+  int32 tickLower = 6;
+  int32 tickUpper = 7;
+  string positionLiquidity = 8;
 }
 
 message PoolStateResponse {

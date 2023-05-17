@@ -37,9 +37,9 @@ server.addService(BlockchainDataFetcher.service, {
     }
   },
   GetPoolState: async (call, callback) => {
-    const { chainId, token0, token1, fee, tickLower, tickUpper, positionLiquidity } = call.request;
+    const { poolAddress, chainId, token0, token1, fee, tickLower, tickUpper, positionLiquidity } = call.request;
     try {
-      const poolState = await getPoolState(chainId, token0, token1, fee, tickLower, tickUpper, positionLiquidity);
+      const poolState = await getPoolState(poolAddress, chainId, token0, token1, fee, tickLower, tickUpper, positionLiquidity);
       callback(null, poolState);
     } catch (error) {
       callback(error);

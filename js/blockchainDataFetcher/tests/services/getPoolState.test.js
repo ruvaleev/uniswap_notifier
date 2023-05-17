@@ -17,21 +17,10 @@ describe('getPoolState', () => {
     symbol: 'USDC',
     name: 'USD Coin (Arb1)'
   }
-  const inputData = [42161, token0, token1, 3000, -201960, -188100, '176562249908']
-  const errorText = 'bad address checksum (argument="address", value="0x82aF49447D8a07e3bd95BD0d56f35241523fBab0", code=INVALID_ARGUMENT, version=6.3.0)'
+  const poolAddress = '0x17c14D2c404D167802b16C450d3c99F88F2c4F4d'
+  const inputData = [poolAddress, 42161, token0, token1, 3000, -201960, -188100, '176562249908']
 
   beforeAll(() => {
-      const factory = {
-        getPool: jest.fn().mockImplementation((token0Address) => {
-          if (token0Address !== token0.address) {
-            throw new TypeError(errorText);
-          }
-
-          Promise.resolve('0xPoolAddress')
-        })
-      };
-      const factoryAddress = '0x1F98431c8aD98523631AE4a59f267346ea31F984';
-
       const poolContract = {
         liquidity: jest.fn().mockReturnValue(
           Promise.resolve(
@@ -48,13 +37,7 @@ describe('getPoolState', () => {
         ),
       }
 
-      ethers.Contract = jest.fn().mockImplementation((address) => {
-        if (address === factoryAddress) {
-          return factory
-        } else {
-          return poolContract
-        }
-      });
+      ethers.Contract = jest.fn().mockImplementation(() => poolContract);
   });
 
   describe('with valid inputData', () => {
@@ -90,9 +73,9 @@ describe('getPoolState', () => {
         symbol: 'WETH',
         name: 'Wrapped Ether'
       }
-      const invalidInputData = [42161, invalidToken, token1, 3000, -201960, -188100, '176562249908'];
+      const invalidInputData = [poolAddress, 42161, invalidToken, token1, 3000, -201960, -188100, '176562249908'];
 
-      await expect(getPoolState(...invalidInputData)).rejects.toThrow(new TypeError(errorText));
+      await expect(getPoolState(...invalidInputData)).rejects.toThrow(new TypeError('invalidAddress is not a valid address.'));
     });
   })
 });
