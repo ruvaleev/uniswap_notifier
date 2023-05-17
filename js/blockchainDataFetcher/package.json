@@ -16,6 +16,7 @@
     "@grpc/grpc-js": "^1.8.14",
     "@grpc/proto-loader": "^0.7.7",
     "@uniswap/sdk-core": "^3.2.2",
+    "@uniswap/v3-sdk": "^3.9.0",
     "dotenv": "^16.0.3",
     "ethers": "^6.3.0",
     "grpc": "^1.24.11",

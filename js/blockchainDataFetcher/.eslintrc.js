@@ -13,6 +13,9 @@ module.exports = {
     'node/no-unsupported-features/es-builtins': ['error', {
       'version': '>=18'
     }],
+    'node/no-unsupported-features/es-syntax': ['error', {
+      'version': '>=18'
+    }],
     'no-multiple-empty-lines': 'error',
     'no-multi-spaces': 'error',
     'no-trailing-spaces': 'error',
