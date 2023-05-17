@@ -10,10 +10,14 @@ module.exports = {
     'sourceType': 'module'
   },
   'rules': {
-    'quotes': ['error', 'single'],
-    'no-multi-spaces': 'error',
-    'space-infix-ops': 'error',
+    'node/no-unsupported-features/es-builtins': ['error', {
+      'version': '>=18'
+    }],
     'no-multiple-empty-lines': 'error',
-    'no-trailing-spaces': 'error'
+    'no-multi-spaces': 'error',
+    'no-trailing-spaces': 'error',
+    'quotes': ['error', 'single'],
+    'space-infix-ops': 'error'
+
   }
 };
