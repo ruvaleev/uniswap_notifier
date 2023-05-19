@@ -142,6 +142,8 @@ describe('BlockchainDataFetcher service', () => {
           name: 'Wrapped Ether',
           amount: '0.002023054661504617',
           price: '1795.27',
+          minPrice: '1696.0051427274943',
+          maxPrice: '6781.55396625618'
         },
         token1: {
           address: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
@@ -150,6 +152,8 @@ describe('BlockchainDataFetcher service', () => {
           name: 'USD Coin (Arb1)',
           amount: '0.209753',
           price: '0.000557021',
+          minPrice: '0.0005896208536206515',
+          maxPrice: '0.00014745882801726922'
         }
       };
 

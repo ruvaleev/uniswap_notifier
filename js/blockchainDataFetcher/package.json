@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "test:units": "jest \"^(?!.*\\.e2e\\.).*\"",
+    "test": "jest \"^(?!.*\\.e2e\\.).*\"",
     "test:e2e": "jest \".*\\.e2e\\..*\"",
     "eslint": "eslint ."
   },
