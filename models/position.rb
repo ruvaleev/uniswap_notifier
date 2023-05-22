@@ -2,12 +2,10 @@
 
 class Position < ActiveRecord::Base
   belongs_to :user
-  belongs_to :coin0, class_name: :Coin, inverse_of: :coin0_positions, foreign_key: :coin0_id
-  belongs_to :coin1, class_name: :Coin, inverse_of: :coin1_positions, foreign_key: :coin1_id
+  has_many :positions_coins, dependent: :restrict_with_error
+  has_many :coins, through: :positions_coins, dependent: :restrict_with_error
 
-  validates :coin0_id,
-            :coin1_id,
-            :notification_status,
+  validates :notification_status,
             :rebalance_threshold_percents,
             :status,
             :user_id,
