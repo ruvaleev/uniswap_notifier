@@ -14,27 +14,27 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_21_121411) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "currencies", force: :cascade do |t|
-    t.string "code", null: false
-    t.decimal "usd_price"
+  create_table "coins", force: :cascade do |t|
+    t.string "address", null: false
+    t.string "symbol", null: false
+    t.integer "decimals", null: false
+    t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["code"], name: "index_currencies_on_code", unique: true
+    t.index ["address"], name: "index_coins_on_address", unique: true
   end
 
   create_table "positions", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.bigint "from_currency_id", null: false
-    t.bigint "to_currency_id", null: false
-    t.decimal "max_price", null: false
-    t.decimal "min_price", null: false
+    t.bigint "coin0_id", null: false
+    t.bigint "coin1_id", null: false
     t.integer "notification_status", default: 0, null: false
     t.integer "rebalance_threshold_percents", default: 0, null: false
     t.integer "status", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["from_currency_id"], name: "index_positions_on_from_currency_id"
-    t.index ["to_currency_id"], name: "index_positions_on_to_currency_id"
+    t.index ["coin0_id"], name: "index_positions_on_coin0_id"
+    t.index ["coin1_id"], name: "index_positions_on_coin1_id"
     t.index ["user_id"], name: "index_positions_on_user_id"
   end
 
@@ -47,7 +47,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_21_121411) do
     t.index ["login"], name: "index_users_on_login", unique: true
   end
 
-  add_foreign_key "positions", "currencies", column: "from_currency_id"
-  add_foreign_key "positions", "currencies", column: "to_currency_id"
+  add_foreign_key "positions", "coins", column: "coin0_id"
+  add_foreign_key "positions", "coins", column: "coin1_id"
   add_foreign_key "positions", "users"
 end
