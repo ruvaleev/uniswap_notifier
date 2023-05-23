@@ -64,6 +64,13 @@ GEM
     fugit (1.8.1)
       et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
+    google-protobuf (3.23.0)
+    googleapis-common-protos-types (1.6.0)
+      google-protobuf (~> 3.14)
+    grpc (1.54.2)
+      google-protobuf (~> 3.21)
+      googleapis-common-protos-types (~> 1.0)
+    grpc-tools (1.54.2)
     hashdiff (1.0.1)
     httparty (0.21.0)
       mini_mime (>= 1.0.0)
@@ -186,6 +193,9 @@ DEPENDENCIES
   database_cleaner-active_record
   database_consistency
   factory_bot
+  google-protobuf
+  grpc
+  grpc-tools
   httparty (>= 0.21.0)
   pg
   pry
