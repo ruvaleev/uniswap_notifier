@@ -10,7 +10,7 @@ AllCops:
     - js/*
     - notes/*
     - js/*
-    - lib/*
+    - lib/grpc/*
 
 Layout/LineLength:
   Max: 120
