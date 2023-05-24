@@ -17,4 +17,6 @@ class Position < ActiveRecord::Base
 
   enum notification_status: { unnotified: 0, notified: 1 }
   enum status: { pending: 0, active: 1, inactive: 2, failed: 3 }
+
+  CHAIN_ID = 42_161
 end
