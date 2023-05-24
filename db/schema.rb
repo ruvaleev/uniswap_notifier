@@ -33,8 +33,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_22_134149) do
     t.integer "notification_status", default: 0, null: false
     t.integer "rebalance_threshold_percents", default: 0, null: false
     t.integer "status", default: 0, null: false
+    t.integer "fee"
+    t.integer "tick_lower"
+    t.integer "tick_upper"
+    t.string "liquidity"
+    t.string "pool_address"
+    t.integer "uniswap_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["uniswap_id", "user_id"], name: "index_positions_on_uniswap_id_and_user_id", unique: true
     t.index ["user_id"], name: "index_positions_on_user_id"
   end
 
