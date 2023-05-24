@@ -25,6 +25,10 @@ MultipleExpectations:
 RSpec/ExampleLength:
   Max: 10
 
+RSpec/FilePath:
+  Exclude:
+    - 'spec/services/blockchain_data_fetcher/client/**/*'
+
 RSpec/MultipleMemoizedHelpers:
   Max: 10
 
