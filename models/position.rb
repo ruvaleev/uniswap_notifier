@@ -19,4 +19,8 @@ class Position < ActiveRecord::Base
   enum status: { pending: 0, active: 1, inactive: 2, failed: 3 }
 
   CHAIN_ID = 42_161
+
+  def need_rebalance?
+    positions_coins.to_rebalance(rebalance_threshold_percents).any?
+  end
 end

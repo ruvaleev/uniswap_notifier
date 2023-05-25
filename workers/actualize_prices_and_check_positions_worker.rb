@@ -6,7 +6,7 @@ class ActualizePricesAndCheckPositionsWorker
   sidekiq_options retry: false
 
   def perform
-    Currency::ActualizePrices.new.call
-    CheckPositionsWorker.perform_async
+    # Currency::ActualizePrices.new.call
+    # CheckPositionsWorker.perform_async
   end
 end

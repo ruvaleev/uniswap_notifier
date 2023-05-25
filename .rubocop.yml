@@ -32,6 +32,9 @@ RSpec/FilePath:
 RSpec/MultipleMemoizedHelpers:
   Max: 10
 
+RSpec/NestedGroups:
+  Max: 5
+
 RSpec/Rails/InferredSpecType:
   Enabled: false
 
