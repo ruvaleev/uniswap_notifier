@@ -14,7 +14,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :decimals, :int32, 3
     end
     add_message "PositionRequest" do
-      optional :id, :string, 1
+      optional :id, :int32, 1
     end
     add_message "PositionResponse" do
       optional :token0, :string, 1

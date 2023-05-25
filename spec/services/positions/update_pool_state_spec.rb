@@ -7,9 +7,10 @@ RSpec.describe Positions::UpdatePoolState do
   describe '#call' do
     subject(:call_service) { described_class.new.call(position) }
 
-    let(:position) { create(:position, :filled, coin0:, coin1:) }
-    let(:positions_coin0) { position.positions_coins.find_by(number: '0') }
-    let(:positions_coin1) { position.positions_coins.find_by(number: '1') }
+    let(:position) { create(:position, :filled) }
+    let!(:positions_coin0) { create(:positions_coin, coin: coin0, number: 0, **params) }
+    let!(:positions_coin1) { create(:positions_coin, coin: coin1, number: 1, **params) }
+    let(:params) { { position:, amount: nil, price: nil, min_price: nil, max_price: nil } }
     let(:coin0) { create(:coin) }
     let(:coin1) { create(:coin) }
 
@@ -18,13 +19,10 @@ RSpec.describe Positions::UpdatePoolState do
     before do
       allow(BlockchainDataFetcher::Client).to receive(:pool_state)
         .with(position).and_return(pool_state_response)
+      call_service
     end
 
     it 'updates current state of provided position positions_coins' do
-      expect([positions_coin0, positions_coin1].pluck(:amount).flatten.uniq).to eq([nil])
-
-      call_service
-
       [[positions_coin0, token0_data], [positions_coin1, token1_data]].each do |record, token_data|
         expect(record.reload).to have_attributes(
           amount: BigDecimal(token_data[:amount]),

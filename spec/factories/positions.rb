@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :position do
     association :user
-    sequence(:uniswap_id) { |i| i }
+    sequence(:uniswap_id) { |i| 100 + i }
 
     trait :filled do
       transient do

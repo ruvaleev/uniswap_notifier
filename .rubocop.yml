@@ -6,6 +6,7 @@ AllCops:
   NewCops: enable
   TargetRubyVersion: 3.2.2
   Exclude:
+    - client.rb
     - db/schema.rb
     - js/*
     - notes/*

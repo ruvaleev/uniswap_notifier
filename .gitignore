@@ -6,4 +6,6 @@
 **/node_modules
 /notes
 
+client.rb
+js/blockchainDataFetcher/client.js
 secrets.yml
