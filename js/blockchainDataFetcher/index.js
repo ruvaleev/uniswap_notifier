@@ -2,7 +2,7 @@ const grpc = require('@grpc/grpc-js');
 const server = require('./server');
 
 const port = process.env.PORT || '50051';
-const host = `localhost:${port}`;
+const host = `0.0.0.0:${port}`;
 
 server.bindAsync(
   host,

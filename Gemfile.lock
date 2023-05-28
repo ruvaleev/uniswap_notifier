@@ -67,8 +67,8 @@ GEM
     google-protobuf (3.23.0)
     googleapis-common-protos-types (1.6.0)
       google-protobuf (~> 3.14)
-    grpc (1.54.2)
-      google-protobuf (~> 3.21)
+    grpc (1.55.0)
+      google-protobuf (~> 3.23)
       googleapis-common-protos-types (~> 1.0)
     grpc-tools (1.54.2)
     hashdiff (1.0.1)
@@ -194,7 +194,7 @@ DEPENDENCIES
   database_consistency
   factory_bot
   google-protobuf
-  grpc
+  grpc (~> 1.55)
   grpc-tools
   httparty (>= 0.21.0)
   pg

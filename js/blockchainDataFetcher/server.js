@@ -5,7 +5,7 @@ const { getTokenData } = require('./services/getTokenData')
 const { getPositionData } = require('./services/getPositionData')
 const { getPoolState } = require('./services/getPoolState')
 
-const PROTO_PATH = '../../protos/blockchain_data_fetcher.proto';
+const PROTO_PATH = './protos/blockchain_data_fetcher.proto';
 
 const packageDefinition = protoLoader.loadSync(
   PROTO_PATH,

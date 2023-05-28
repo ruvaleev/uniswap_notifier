@@ -40,7 +40,11 @@ module BlockchainDataFetcher
       end
 
       def stub
-        @stub ||= BlockchainDataFetcher::Stub.new('localhost:50051', :this_channel_is_insecure)
+        @stub ||=
+          BlockchainDataFetcher::Stub.new(
+            "#{ENV.fetch('NODE_APP_HOST', 'localhost')}:50051",
+            :this_channel_is_insecure
+          )
       end
     end
   end

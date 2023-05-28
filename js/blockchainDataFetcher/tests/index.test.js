@@ -14,7 +14,7 @@ describe('index.js', () => {
 
   it('server.bindAsync is called with the correct parameters', () => {
     expect(server.bindAsync).toHaveBeenCalledWith(
-      'localhost:50051',
+      '0.0.0.0:50051',
       grpc.ServerCredentials.createInsecure(),
       expect.any(Function)
     );
