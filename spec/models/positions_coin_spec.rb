@@ -35,5 +35,11 @@ RSpec.describe PositionsCoin, type: :model do
 
     it { is_expected.to be_an(ActiveRecord::Relation) }
     it { is_expected.to match_array([too_low_price_record, too_high_price_record]) }
+
+    context 'when min_price is bigger than max_price' do
+      let(:normal_price_params) { { price: 10, min_price: 18, max_price: 9 } }
+
+      it { is_expected.not_to include(normal_price_record) }
+    end
   end
 end
