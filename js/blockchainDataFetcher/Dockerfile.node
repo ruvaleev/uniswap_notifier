@@ -4,6 +4,7 @@ WORKDIR /app/js/blockchainDataFetcher
 
 COPY package*.json ./
 
+RUN yarn add grpc-tools --ignore-scripts
 RUN yarn install
 
 COPY . .
