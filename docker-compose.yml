@@ -10,9 +10,9 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: position_watcher_dev
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
 
   ruby_app:
     platform: linux/amd64
@@ -24,10 +24,9 @@ services:
       - db
       - redis
     environment:
-      - DB_PASSWORD=postgres
-      - DB_USER=postgres
-      - DB_NAME=position_watcher_dev
-      - DATABASE_URL=postgres://postgres:postgres@db:5432/position_watcher_dev
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_USER=${DB_USER}
+      - DB_NAME=${DB_NAME}
       - NODE_APP_HOST=node_app
       - REDIS_URL=redis://redis:6379
 
