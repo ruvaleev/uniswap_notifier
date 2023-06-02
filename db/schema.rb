@@ -10,32 +10,53 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_21_121411) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_22_134149) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "currencies", force: :cascade do |t|
-    t.string "code", null: false
-    t.decimal "usd_price"
+  # Custom types defined in this database.
+  # Note that some types may not work with other database engines. Be careful if changing database.
+  create_enum "positions_coins_number", ["0", "1"]
+
+  create_table "coins", force: :cascade do |t|
+    t.string "address", null: false
+    t.string "symbol", null: false
+    t.integer "decimals", null: false
+    t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["code"], name: "index_currencies_on_code", unique: true
+    t.index ["address"], name: "index_coins_on_address", unique: true
   end
 
   create_table "positions", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.bigint "from_currency_id", null: false
-    t.bigint "to_currency_id", null: false
-    t.decimal "max_price", null: false
-    t.decimal "min_price", null: false
     t.integer "notification_status", default: 0, null: false
     t.integer "rebalance_threshold_percents", default: 0, null: false
     t.integer "status", default: 0, null: false
+    t.integer "fee"
+    t.integer "tick_lower"
+    t.integer "tick_upper"
+    t.string "liquidity"
+    t.string "pool_address"
+    t.integer "uniswap_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["from_currency_id"], name: "index_positions_on_from_currency_id"
-    t.index ["to_currency_id"], name: "index_positions_on_to_currency_id"
+    t.index ["uniswap_id", "user_id"], name: "index_positions_on_uniswap_id_and_user_id", unique: true
     t.index ["user_id"], name: "index_positions_on_user_id"
+  end
+
+  create_table "positions_coins", force: :cascade do |t|
+    t.bigint "position_id", null: false
+    t.bigint "coin_id", null: false
+    t.decimal "amount"
+    t.decimal "price"
+    t.decimal "min_price"
+    t.decimal "max_price"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.enum "number", default: "0", null: false, enum_type: "positions_coins_number"
+    t.index ["coin_id"], name: "index_positions_coins_on_coin_id"
+    t.index ["position_id", "number"], name: "index_positions_coins_on_position_id_and_number", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -47,7 +68,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_21_121411) do
     t.index ["login"], name: "index_users_on_login", unique: true
   end
 
-  add_foreign_key "positions", "currencies", column: "from_currency_id"
-  add_foreign_key "positions", "currencies", column: "to_currency_id"
   add_foreign_key "positions", "users"
+  add_foreign_key "positions_coins", "coins"
+  add_foreign_key "positions_coins", "positions"
 end

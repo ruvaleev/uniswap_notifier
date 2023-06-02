@@ -26,6 +26,6 @@ class TelegramNotifier
   private
 
   def needs_rebalancing_message(position)
-    "Your position #{position.from_currency.code}/#{position.to_currency.code} needs rebalancing!"
+    "Your position needs rebalancing: https://app.uniswap.org/#/pools/#{position.uniswap_id}"
   end
 end

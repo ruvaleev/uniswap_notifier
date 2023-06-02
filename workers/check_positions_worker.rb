@@ -6,9 +6,9 @@ class CheckPositionsWorker
   sidekiq_options retry: false
 
   def perform
-    Position.to_rebalance.active.unnotified.select(:id).each_slice(1000) do |batch|
+    Position.active.unnotified.select(:id).each_slice(1000) do |batch|
       Sidekiq::Client.push_bulk(
-        'class' => NotifyUserWorker,
+        'class' => Positions::UpdateStateAndNotifyWorker,
         'args' => batch.map { |payload| [payload[:id]] }
       )
     end

@@ -6,15 +6,13 @@ RSpec.describe TelegramNotifier do
   describe '#call' do
     subject(:call_service) { described_class.new(position).call }
 
-    let(:position) { create(:position, user:, from_currency:, to_currency:, notification_status:) }
+    let(:position) { create(:position, user:, notification_status:) }
     let(:user) { create(:user, telegram_chat_id:) }
-    let(:from_currency) { create(:currency) }
-    let(:to_currency) { create(:currency) }
     let(:notification_status) { :unnotified }
     let(:telegram_chat_id) { rand(100).to_s }
     let(:tg_bot_client_double) { instance_double(Telegram::Bot::Client, api: tg_bot_api_double) }
     let(:tg_bot_api_double) { double(Telegram::Bot::Api, send_message: true) } # rubocop:disable RSpec/VerifiedDoubles
-    let(:alert_message) { "Your position #{from_currency.code}/#{to_currency.code} needs rebalancing!" }
+    let(:alert_message) { "Your position needs rebalancing: https://app.uniswap.org/#/pools/#{position.uniswap_id}" }
 
     before { described_class.instance_variable_set('@client', tg_bot_client_double) }
 

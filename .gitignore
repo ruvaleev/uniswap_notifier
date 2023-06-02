@@ -1,6 +1,12 @@
+.bundle
 .byebug_history
+.env.local
+.env.production
 .rspec
 
+**/node_modules
 /notes
 
-secrets.yml
+client.rb
+js/blockchainDataFetcher/.env
+js/blockchainDataFetcher/client.js

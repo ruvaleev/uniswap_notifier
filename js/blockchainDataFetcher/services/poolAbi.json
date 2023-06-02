@@ -1,0 +1,33 @@
+[
+  {
+    "inputs": [],
+    "name": "slot0",
+    "outputs": [
+      {
+        "internalType": "uint160",
+        "name": "sqrtPriceX96",
+        "type": "uint160"
+      },
+      {
+        "internalType": "int24",
+        "name": "tick",
+        "type": "int24"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "liquidity",
+    "outputs": [
+      {
+        "internalType": "uint128",
+        "name": "",
+        "type": "uint128"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

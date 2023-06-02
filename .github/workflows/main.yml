@@ -33,9 +33,6 @@ jobs:
         with:
           ruby-version: 3.0
 
-      - name: Copy secrets
-        run: cp config/secrets.yml.sample config/secrets.yml
-
       - name: Install dependencies
         run: bundle install --jobs 4 --retry 3
 

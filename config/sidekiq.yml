@@ -1,5 +1,5 @@
 :scheduler:
   :schedule:
-    actualize_prices_and_check_positions_worker:
-      class: ActualizePricesAndCheckPositionsWorker
+    check_positions_worker:
+      class: CheckPositionsWorker
       cron: '*/5 * * * * *'   # Runs every 5 seconds

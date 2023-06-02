@@ -6,8 +6,12 @@ AllCops:
   NewCops: enable
   TargetRubyVersion: 3.2.2
   Exclude:
+    - client.rb
     - db/schema.rb
+    - js/*
     - notes/*
+    - js/*
+    - lib/grpc/*
 
 Layout/LineLength:
   Max: 120
@@ -22,8 +26,15 @@ MultipleExpectations:
 RSpec/ExampleLength:
   Max: 10
 
+RSpec/FilePath:
+  Exclude:
+    - 'spec/services/blockchain_data_fetcher/client/**/*'
+
 RSpec/MultipleMemoizedHelpers:
   Max: 10
+
+RSpec/NestedGroups:
+  Max: 5
 
 RSpec/Rails/InferredSpecType:
   Enabled: false

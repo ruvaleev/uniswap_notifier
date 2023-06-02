@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+service BlockchainDataFetcher {
+  rpc GetTokenData (TokenRequest) returns (TokenResponse) {}
+  rpc GetPositionData (PositionRequest) returns (PositionResponse) {}
+  rpc GetPoolState (PoolStateRequest) returns (PoolStateResponse) {}
+}
+
+message TokenRequest {
+  string address = 1;
+}
+
+message TokenResponse {
+  string name = 1;
+  string symbol = 2;
+  int32 decimals = 3;
+}
+
+message PositionRequest {
+  int32 id = 1;
+}
+
+message PositionResponse {
+  string token0 = 1;
+  string token1 = 2;
+  int32 fee = 3;
+  int32 tickLower = 4;
+  int32 tickUpper = 5;
+  string liquidity = 6;
+  string poolAddress = 7;
+}
+
+message PoolStateRequest {
+  message Token {
+    string address = 1;
+    int32 decimals = 2;
+    string symbol = 3;
+    string name = 4;
+  }
+
+  string poolAddress = 1;
+  int32 chainId = 2;
+  Token token0 = 3;
+  Token token1 = 4;
+  int32 fee = 5;
+  int32 tickLower = 6;
+  int32 tickUpper = 7;
+  string positionLiquidity = 8;
+}
+
+message PoolStateResponse {
+  message Token {
+    string address = 1;
+    int32 decimals = 2;
+    string symbol = 3;
+    string name = 4;
+    string amount = 5;
+    string price = 6;
+    string minPrice = 7;
+    string maxPrice = 8;
+  }
+
+  Token token0 = 1;
+  Token token1 = 2;
+}

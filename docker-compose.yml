@@ -1,0 +1,43 @@
+version: '3.8'
+services:
+  redis:
+    image: redis
+    ports:
+      - '6379:6379'
+
+  db:
+    image: postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+
+  ruby_app:
+    platform: linux/amd64
+    build:
+      context: .
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+    environment:
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_USER=${DB_USER}
+      - DB_NAME=${DB_NAME}
+      - NODE_APP_HOST=node_app
+      - REDIS_URL=redis://redis:6379
+
+  node_app:
+    build:
+      context: ./js/blockchainDataFetcher
+      dockerfile: Dockerfile.node
+    volumes:
+      - ./js/blockchainDataFetcher:/app/js/blockchainDataFetcher
+    ports:
+      - "50051:50051"
+
+volumes:
+  db_data:
