@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 
 gem 'bcrypt'
 gem 'bundle-audit'
+gem 'dotenv'
 gem 'google-protobuf'
 gem 'grpc', '~> 1.55'
 gem 'grpc-tools'
