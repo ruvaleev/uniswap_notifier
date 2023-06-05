@@ -5,7 +5,6 @@ development: &defaults
   pool: 5
   username: <%= ENV['DB_USER'] %>
   password: <%= ENV['DB_PASSWORD'] %>
-  url: <%= ENV['DATABASE_URL'] %>
 
 test:
   <<: *defaults
@@ -13,7 +12,4 @@ test:
 
 production:
   <<: *defaults
-  adapter: postgresql
-  database: <%= ENV['DB_NAME'] %>
-  username: <%= ENV['DB_USER'] %>
-  password: <%= ENV['DB_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
