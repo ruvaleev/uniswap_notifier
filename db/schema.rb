@@ -60,11 +60,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_22_134149) do
   end
 
   create_table "users", force: :cascade do |t|
+    t.string "address", null: false
     t.string "login", null: false
     t.string "password_hash", null: false
     t.string "telegram_chat_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["address"], name: "index_users_on_address", unique: true
     t.index ["login"], name: "index_users_on_login", unique: true
   end
 
