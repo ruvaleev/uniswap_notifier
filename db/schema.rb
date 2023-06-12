@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_22_134149) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_12_131805) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -26,6 +26,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_22_134149) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["address"], name: "index_coins_on_address", unique: true
+  end
+
+  create_table "notification_statuses", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "status", default: 0, null: false
+    t.integer "uniswap_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_notification_statuses_on_user_id"
   end
 
   create_table "positions", force: :cascade do |t|
@@ -70,6 +79,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_22_134149) do
     t.index ["login"], name: "index_users_on_login", unique: true
   end
 
+  add_foreign_key "notification_statuses", "users"
   add_foreign_key "positions", "users"
   add_foreign_key "positions_coins", "coins"
   add_foreign_key "positions_coins", "positions"
