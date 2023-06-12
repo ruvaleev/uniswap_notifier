@@ -4,8 +4,9 @@ class NotifyUserWorker
   include Sidekiq::Worker
 
   def perform(position_id)
-    TelegramNotifier.new(
-      Position.find(position_id)
-    ).call
+    position = Position.find(position_id)
+    return if position.notified?
+
+    TelegramNotifier.new(position.user.telegram_chat_id, position.uniswap_id).call
   end
 end

@@ -7,25 +7,23 @@ class TelegramNotifier
     attr_reader :client
   end
 
-  attr_reader :position
+  attr_reader :telegram_chat_id, :uniswap_id
 
-  def initialize(position)
-    @position = position
+  def initialize(telegram_chat_id, uniswap_id)
+    @telegram_chat_id = telegram_chat_id
+    @uniswap_id = uniswap_id
   end
 
   def call
-    return if position.notified?
-
     self.class.client.api.send_message(
-      chat_id: position.user.telegram_chat_id,
-      text: needs_rebalancing_message(position)
+      chat_id: telegram_chat_id,
+      text: needs_rebalancing_message(uniswap_id)
     )
-    position.notified!
   end
 
   private
 
-  def needs_rebalancing_message(position)
-    "Your position needs rebalancing: https://app.uniswap.org/#/pools/#{position.uniswap_id}"
+  def needs_rebalancing_message(uniswap_id)
+    "Your position needs rebalancing: https://app.uniswap.org/#/pools/#{uniswap_id}"
   end
 end
