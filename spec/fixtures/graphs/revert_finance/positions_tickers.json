@@ -1,0 +1,22 @@
+{
+  "data": {
+    "positions": [
+      {
+        "id": "1",
+        "pool": {
+          "tick": "-201681"
+        },
+        "tickLower": "-201270",
+        "tickUpper": "-200260"
+      },
+      {
+        "id": "2",
+        "pool": {
+          "tick": "-201676"
+        },
+        "tickLower": "-201360",
+        "tickUpper": "-199360"
+      }
+    ]
+  }
+}

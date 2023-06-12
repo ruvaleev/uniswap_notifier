@@ -1,0 +1,47 @@
+{
+  "data": {
+    "positions":
+    [
+      {
+        "amountCollectedUSD": "0",
+        "amountDepositedUSD": "2526.539167077454928429625034289705",
+        "amountWithdrawnUSD": "0",
+        "collectedFeesToken0": "0",
+        "collectedFeesToken1": "0",
+        "collectedToken0": "0",
+        "collectedToken1": "0",
+        "depositedToken0": "0.728292956059790821",
+        "depositedToken1": "1139.305332",
+        "feeGrowthInside0LastX128": "28290246530368791483811191709186170694226",
+        "feeGrowthInside1LastX128": "53656872460321569507058429630184",
+        "id": "1",
+        "liquidity": "1160980688244751",
+        "tickLower": "-201270",
+        "tickUpper": "-200260",
+        "withdrawnToken0": "0",
+        "withdrawnToken1": "0",
+        "owner": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb0"
+      },
+    {
+      "amountCollectedUSD": "0",
+      "amountDepositedUSD": "8302.632368364887969229217412107171",
+      "amountWithdrawnUSD": "0",
+      "collectedFeesToken0": "0",
+      "collectedFeesToken1": "0",
+      "collectedToken0": "0",
+      "collectedToken1": "0",
+      "depositedToken0": "2.093874190053694719",
+      "depositedToken1": "4137.645289",
+      "feeGrowthInside0LastX128": "78385468400655030670247336705936697821008",
+      "feeGrowthInside1LastX128": "133188508993072388072742577267544",
+      "id": "2",
+      "liquidity": "1908612923862013",
+      "tickLower": "-201360",
+      "tickUpper": "-199360",
+      "withdrawnToken0": "0",
+      "withdrawnToken1": "0",
+      "owner": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb0"
+    }
+  ]
+}
+}
