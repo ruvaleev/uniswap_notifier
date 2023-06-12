@@ -9,5 +9,7 @@ class CreateNotificationStatuses < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
+
+    add_index :notification_statuses, %i[uniswap_id user_id], unique: true
   end
 end

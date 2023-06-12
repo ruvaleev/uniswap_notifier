@@ -9,5 +9,6 @@ RSpec.describe NotificationStatus, type: :model do
 
   it { is_expected.to validate_presence_of(:status) }
   it { is_expected.to validate_presence_of(:uniswap_id) }
-  it { is_expected.to validate_uniqueness_of(:uniswap_id) }
+  it { is_expected.to validate_uniqueness_of(:uniswap_id).case_insensitive.scoped_to(:user_id) }
+  it { is_expected.to validate_presence_of(:user_id) }
 end
