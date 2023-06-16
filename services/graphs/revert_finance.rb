@@ -32,29 +32,44 @@ module Graphs
 
     def positions(owner_address)
       response = make_request(
-        build_positions_body(owner_address, fields: POSITIONS_FIELDS)
+        build_positions_body(
+          where: positions_where_clause(owner_address),
+          fields: POSITIONS_FIELDS
+        )
       )
       JSON.parse(response.body)
     end
 
-    def positions_tickers(owner_address)
+    def positions_tickers(owner_address, id_not_in: [])
       response = make_request(
-        build_positions_body(owner_address, fields: POSITIONS_TICKERS_FIELDS)
+        build_positions_body(
+          where: positions_tickers_where_clause(owner_address, id_not_in),
+          fields: POSITIONS_TICKERS_FIELDS
+        )
       )
       JSON.parse(response.body)
     end
 
     private
 
-    def build_positions_body(owner_address, fields:)
-      { query: positions_query(owner_address, fields:) }.to_json
+    def build_positions_body(where:, fields:)
+      { query: positions_query(where:, fields:) }.to_json
     end
 
-    def positions_query(owner_address, fields:)
+    def positions_tickers_where_clause(owner_address, id_not_in)
+      positions_where_clause(owner_address) +
+        (id_not_in.blank? ? '' : ", id_not_in: #{id_not_in}")
+    end
+
+    def positions_where_clause(owner_address)
+      "owner: \"#{owner_address}\", liquidity_gt: 0"
+    end
+
+    def positions_query(where:, fields:)
       <<~GQL
         {
           positions(
-            where: {owner: "#{owner_address}", liquidity_gt: "0"}
+            where: {#{where}}
           ) {#{fields}}
         }
       GQL
