@@ -12,7 +12,10 @@ RSpec.describe CheckPositionsWorker do
     let(:balanced_position) { create(:position, **target_params) }
     let(:inactive_position) { create(:position, **target_params, status: :inactive) }
     let(:notified_position) { create(:position, **target_params, notification_status: :notified) }
-    let(:target_position) { create(:position, **target_params) }
+    let(:target_position) { create(:position, **target_params, user:, uniswap_id:) }
+    let(:user) { create(:user, telegram_chat_id:) }
+    let(:telegram_chat_id) { rand(100).to_s }
+    let(:uniswap_id) { rand(100) }
     let(:target_params) { { status: :active, notification_status: :unnotified } }
     let(:balanced_pos_coins) { create(:positions_coin, :balanced, position: balanced_position) }
     let(:inactive_pos_coins) { create(:positions_coin, :balanced, position: inactive_position) }
@@ -25,7 +28,7 @@ RSpec.describe CheckPositionsWorker do
       notified_pos_coins
       target_pos_coins
       allow(Positions::UpdatePoolState).to receive(:new).and_return(update_pool_state_double)
-      allow(TelegramNotifier).to receive(:new).with(target_position).and_return(telegram_notifier_double)
+      allow(TelegramNotifier).to receive(:new).with(telegram_chat_id, uniswap_id).and_return(telegram_notifier_double)
     end
 
     it_behaves_like 'sidekiq worker'

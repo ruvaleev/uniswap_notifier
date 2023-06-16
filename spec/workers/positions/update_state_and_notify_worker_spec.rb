@@ -19,7 +19,7 @@ RSpec.describe Positions::UpdateStateAndNotifyWorker do
       before { Sidekiq::Testing.fake! }
     end
 
-    it 'calls Positions::UpdatePoolState service with found position', testing: :inline do
+    it 'calls Positions::UpdatePoolState service with found position' do
       perform_worker
       expect(update_pool_state_double).to have_received(:call).with(position).once
     end

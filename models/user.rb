@@ -3,9 +3,10 @@
 class User < ActiveRecord::Base
   include BCrypt
 
+  has_many :notification_statuses, dependent: :destroy
   has_many :positions, dependent: :destroy
 
-  validates :login, presence: true, uniqueness: true
+  validates :address, :login, presence: true, uniqueness: true
   validates :password_hash, presence: true
   validate :password_length
 

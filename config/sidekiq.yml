@@ -1,5 +1,5 @@
 :scheduler:
   :schedule:
     check_positions_worker:
-      class: CheckPositionsWorker
+      class: CheckTicksWorker
       cron: '*/5 * * * * *'   # Runs every 5 seconds
