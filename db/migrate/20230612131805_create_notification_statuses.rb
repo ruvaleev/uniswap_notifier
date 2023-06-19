@@ -6,6 +6,7 @@ class CreateNotificationStatuses < ActiveRecord::Migration[7.0]
       t.references :user, null: false, foreign_key: true
       t.integer :status, null: false, default: 0
       t.integer :uniswap_id, null: false
+      t.datetime :last_sent_at, index: true
 
       t.timestamps
     end

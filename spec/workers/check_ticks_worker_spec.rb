@@ -21,8 +21,8 @@ RSpec.describe CheckTicksWorker do
       it 'asynchronously checks every user with telegram_chat_id' do
         perform_worker
         expect(check_service_double).to have_received(:call).exactly(2).times
-        expect(check_service_double).to have_received(:call).with(user1.address, 10)
-        expect(check_service_double).to have_received(:call).with(user2.address, 10)
+        expect(Positions::CheckByOwnerAddress).to have_received(:new).with(user1.address, 10)
+        expect(Positions::CheckByOwnerAddress).to have_received(:new).with(user2.address, 10)
       end
     end
   end

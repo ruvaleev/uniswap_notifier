@@ -4,21 +4,41 @@ module Positions
   class CheckByOwnerAddress
     class NotFoundError < StandardError; end
 
-    def call(address, threshold)
-      collection = api_service.positions_tickers(address, id_not_in: except_ids(address))
+    attr_reader :address, :threshold
+
+    def initialize(address, threshold)
+      @address = address
+      @threshold = threshold
+    end
+
+    def call
+      collection = api_service.positions_tickers(address)
       check_positions_tickers(address, collection['data']['positions'], threshold)
     end
 
     private
 
+    def notification_statuses
+      @notification_statuses ||=
+        NotificationStatus.joins(:user).where(users: { address: })
+                          .select(:status, :uniswap_id).to_h { |rec| [rec.uniswap_id.to_s, rec.status] }
+    end
+
     def check_positions_tickers(address, collection, threshold)
       collection.each do |record|
-        NotifyOwnerWorker.perform_async(address, record['id']) if should_rebalance?(record, threshold)
+        uniswap_id = record['id']
+        if should_rebalance?(record, threshold)
+          notify(address, uniswap_id, 'out_of_range')
+        else
+          notify(address, uniswap_id, 'in_range')
+        end
       end
     end
 
-    def except_ids(address)
-      NotificationStatus.joins(:user).where(status: :notified, users: { address: }).pluck(:uniswap_id)
+    def notify(address, uniswap_id, status)
+      return if notification_statuses[uniswap_id] == status
+
+      NotifyOwnerWorker.perform_async(address, uniswap_id, status)
     end
 
     def api_service
