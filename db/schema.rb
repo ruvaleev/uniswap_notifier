@@ -32,8 +32,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_12_131805) do
     t.bigint "user_id", null: false
     t.integer "status", default: 0, null: false
     t.integer "uniswap_id", null: false
+    t.datetime "last_sent_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["last_sent_at"], name: "index_notification_statuses_on_last_sent_at"
     t.index ["uniswap_id", "user_id"], name: "index_notification_statuses_on_uniswap_id_and_user_id", unique: true
     t.index ["user_id"], name: "index_notification_statuses_on_user_id"
   end
