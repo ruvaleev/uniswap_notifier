@@ -28,10 +28,14 @@ RSpec.describe NotifyOwnerWorker do
     end
 
     context 'when there is no NotificationStatus for position yet', testing: :inline do
+      let(:time_now) { Date.current.to_datetime }
+
+      before { allow(Time).to receive(:now).and_return(time_now) }
+
       it 'creates NotificationStatus and moves it to :out_of_range status' do
         expect { perform_worker }.to change(NotificationStatus, :count).by(1)
         expect(NotificationStatus.last).to have_attributes(
-          user_id: user.id, uniswap_id:, status: 'out_of_range'
+          user_id: user.id, uniswap_id:, status: 'out_of_range', last_sent_at: Date.current.to_datetime
         )
       end
     end

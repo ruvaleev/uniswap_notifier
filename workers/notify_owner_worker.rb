@@ -12,7 +12,7 @@ class NotifyOwnerWorker
     return if notification_status.status == message_type || already_sent?(notification_status)
 
     TelegramNotifier.new(chat_id, message(uniswap_id, message_type)).call
-    notification_status.update(status: message_type)
+    notification_status.update(status: message_type, last_sent_at: Time.now)
   end
 
   private
