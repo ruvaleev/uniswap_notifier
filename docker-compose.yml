@@ -30,14 +30,5 @@ services:
       - NODE_APP_HOST=node_app
       - REDIS_URL=redis://redis:6379
 
-  node_app:
-    build:
-      context: ./js/blockchainDataFetcher
-      dockerfile: Dockerfile.node
-    volumes:
-      - ./js/blockchainDataFetcher:/app/js/blockchainDataFetcher
-    ports:
-      - "50051:50051"
-
 volumes:
   db_data:
