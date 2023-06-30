@@ -10,13 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_12_131805) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_30_134638) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
   create_enum "positions_coins_number", ["0", "1"]
+
+  create_table "authentications", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "ip_address", null: false
+    t.datetime "last_usage_at"
+    t.string "token", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["token"], name: "index_authentications_on_token"
+    t.index ["user_id"], name: "index_authentications_on_user_id"
+  end
 
   create_table "coins", force: :cascade do |t|
     t.string "address", null: false
@@ -82,6 +93,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_12_131805) do
     t.index ["login"], name: "index_users_on_login", unique: true
   end
 
+  add_foreign_key "authentications", "users"
   add_foreign_key "notification_statuses", "users"
   add_foreign_key "positions", "users"
   add_foreign_key "positions_coins", "coins"
