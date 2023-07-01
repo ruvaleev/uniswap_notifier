@@ -13,7 +13,7 @@ RSpec.describe 'GET /authenticate' do
   end
   let(:chain_id) { 42_161 }
   let(:headers) { { 'REMOTE_ADDR' => ip_address } }
-  let(:ip_address) { '123.45.67.89' }
+  let(:ip_address) { "123.45.67.#{rand(100)}" }
 
   context 'when signature is valid' do
     it 'returns successful response and assigns correct Authorization token' do
