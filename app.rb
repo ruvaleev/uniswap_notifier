@@ -19,6 +19,11 @@ get '/telegram_link' do
   { link: Telegram::CreateLink.new.call(current_user.id) }.to_json
 end
 
+post '/telegram_callback' do
+  Telegram::HandleCallback.new.call(params)
+  200
+end
+
 def valid_signature?
   VerifySignature.new.call(
     address: params[:address],

@@ -16,6 +16,10 @@ AllCops:
 Layout/LineLength:
   Max: 120
 
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    - spec/**/*
+
 Metrics/MethodLength:
   Exclude:
     - db/migrate/*
