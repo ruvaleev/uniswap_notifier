@@ -44,6 +44,9 @@ jobs:
           bundle exec rake db:create
           bundle exec rake db:schema:load
 
+      - name: Setup Redis
+        uses: zhulik/redis-action@1.1.0
+
       - name: Run RSpec
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/position_watcher_test
