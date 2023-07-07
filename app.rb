@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require './config/environment'
+require 'sinatra'
 
 error Authentications::NotFound do 401 end # rubocop:disable Style/BlockDelimiters
 
@@ -9,10 +10,6 @@ get '/authenticate' do
 
   headers 'Authentication' => Users::Authenticate.new.call(params[:address], request.ip)
   200
-end
-
-get '/' do
-  slim :index
 end
 
 get '/telegram_link' do
