@@ -6,7 +6,7 @@ RSpec.describe VerifySignature do
   describe '#call' do
     subject(:call_service) { described_class.new.call(address:, message:, signature:, chain_id:) }
 
-    let(:address) { '0x1542daDDa32ba086434D589a8f005176D6E650B4' }
+    let(:address) { '0x1542dadda32ba086434d589a8f005176d6e650b4' }
     let(:message) { '1' }
     let(:chain_id) { 42_161 }
 

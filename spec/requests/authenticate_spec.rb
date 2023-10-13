@@ -11,7 +11,7 @@ RSpec.describe 'POST /authenticate' do
   let(:signature) do
     '0xd5fb766281af5da544c79e8f1ed81a705e4bea0429a313aeab0648e0f1aeee601cf1e63534da5bf94ecae61bc950d0dd0e03eca85e23c2cb9b4903b4b3ca81da1c' # rubocop:disable Layout/LineLength
   end
-  let(:chain_id) { 42_161 }
+  let(:chain_id) { '0xa4b1' }
   let(:headers) { { 'REMOTE_ADDR' => ip_address } }
   let(:ip_address) { "123.45.67.#{rand(100)}" }
 

@@ -45,7 +45,7 @@ def valid_signature?
     address: params[:address],
     message: params[:message],
     signature: params[:signature],
-    chain_id: params[:chain_id].to_i
+    chain_id: params[:chain_id].to_i(16)
   )
 end
 

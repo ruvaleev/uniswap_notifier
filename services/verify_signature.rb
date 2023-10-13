@@ -2,7 +2,7 @@
 
 class VerifySignature
   def call(address:, message:, signature:, chain_id:)
-    address == recovered_address(message, signature, chain_id)
+    address.casecmp?(recovered_address(message, signature, chain_id))
   rescue Eth::Signature::SignatureError, Eth::Chain::ReplayProtectionError
     false
   end
