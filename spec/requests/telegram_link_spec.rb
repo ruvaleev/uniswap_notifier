@@ -5,9 +5,11 @@ require './spec/spec_helper'
 RSpec.describe 'GET /telegram_link' do
   subject(:send_request) { get '/telegram_link', {}, headers }
 
-  let(:headers) { { 'Accept' => 'application/json', 'Authorization' => token, 'REMOTE_ADDR' => ip_address } }
+  let(:headers) { { 'Accept' => 'application/json', 'REMOTE_ADDR' => ip_address } }
   let(:token) { SecureRandom.hex }
   let(:ip_address) { "123.45.67.#{rand(100)}" }
+
+  before { set_cookie "Authentication=#{token}" }
 
   context 'when unauthenticated request' do
     it 'returns :unauthorized error' do

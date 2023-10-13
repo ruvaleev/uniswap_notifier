@@ -16,11 +16,12 @@ RSpec.describe 'GET /authenticate' do
   let(:ip_address) { "123.45.67.#{rand(100)}" }
 
   context 'when signature is valid' do
-    it 'returns successful response and assigns correct Authorization token' do
+    it 'returns successful response and assigns correct Authorization token to cookie' do
       expect { send_request }.to change(Authentication, :count).by(1)
       expect(send_request.status).to eq(200)
+
       expect(Authentication.last).to have_attributes(
-        token: last_response.headers['Authentication'],
+        token: last_response.cookies['Authentication'].first,
         ip_address:
       )
     end
