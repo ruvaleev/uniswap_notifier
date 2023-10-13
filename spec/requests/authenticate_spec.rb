@@ -2,8 +2,8 @@
 
 require './spec/spec_helper'
 
-RSpec.describe 'GET /authenticate' do
-  subject(:send_request) { get '/authenticate', params, headers }
+RSpec.describe 'POST /authenticate' do
+  subject(:send_request) { post '/authenticate', params, headers }
 
   let(:params) { { address:, message:, signature:, chain_id: } }
   let(:address) { '0x1542daDDa32ba086434D589a8f005176D6E650B4' }

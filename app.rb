@@ -5,7 +5,18 @@ require 'sinatra'
 
 error Authentications::NotFound do 401 end # rubocop:disable Style/BlockDelimiters
 
-get '/authenticate' do
+before do
+  response.headers['Access-Control-Allow-Origin'] = allowed_origin
+  response.headers['Access-Control-Allow-Credentials'] = 'true'
+end
+
+options '*' do
+  response.headers['Access-Control-Allow-Headers'] = 'content-type'
+  response.headers['Access-Control-Allow-Methods'] = 'GET'
+  200
+end
+
+post '/authenticate' do
   return 401 unless valid_signature?
 
   set_auth_token(params[:address], request.ip)
@@ -19,6 +30,14 @@ end
 post '/telegram_callback' do
   Telegram::HandleCallback.new.call(params)
   200
+end
+
+def allowed_origin
+  ENV['ORIGINS_URLS'].split(', ').find { |origin| origin == request.env['HTTP_ORIGIN'] } || ''
+end
+
+def current_user
+  @current_user ||= Authentications::Check.new.call(request.cookies['Authentication'], request.ip)
 end
 
 def valid_signature?
@@ -40,8 +59,4 @@ def set_auth_token(address, ip_address)
       http_only: true
     }
   )
-end
-
-def current_user
-  @current_user ||= Authentications::Check.new.call(request.cookies['Authentication'], request.ip)
 end
