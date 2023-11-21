@@ -15,9 +15,8 @@ module Users
 
     def find_or_create_user(address)
       user = User.find_or_initialize_by(address:)
-      return user if user.persisted?
+      user.save unless user.persisted?
 
-      user.update(login: :login, password: :password) # Temporary! REMOVE
       user
     end
 
