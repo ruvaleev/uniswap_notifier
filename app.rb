@@ -3,6 +3,8 @@
 require './config/environment'
 require 'sinatra'
 
+set :show_exceptions, false
+
 error Authentications::NotFound do 401 end # rubocop:disable Style/BlockDelimiters
 
 before do
@@ -25,6 +27,10 @@ end
 
 get '/check_auth' do
   200 if current_user
+end
+
+get '/check_telegram' do
+  { connected: current_user.telegram_chat_id.present? }.to_json
 end
 
 get '/telegram_link' do
