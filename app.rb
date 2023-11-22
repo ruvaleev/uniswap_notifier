@@ -23,6 +23,10 @@ post '/authenticate' do
   200
 end
 
+get '/check_auth' do
+  200 if current_user
+end
+
 get '/telegram_link' do
   { link: Telegram::CreateLink.new.call(current_user.id) }.to_json
 end
