@@ -33,6 +33,11 @@ get '/check_telegram' do
   { connected: current_user.telegram_chat_id.present? }.to_json
 end
 
+patch '/clear_telegram' do
+  Telegram::Delete.new.call(current_user)
+  204
+end
+
 get '/telegram_link' do
   { link: Telegram::CreateLink.new.call(current_user.id) }.to_json
 end
