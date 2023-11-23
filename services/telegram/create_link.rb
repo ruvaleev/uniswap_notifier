@@ -7,7 +7,7 @@ module Telegram
     def call(user_id)
       token = SecureRandom.hex
       save_in_cache(token, user_id)
-      link(token)
+      { link: link(token), expires_in_seconds: TIMEOUT_SECONDS }
     end
 
     private

@@ -25,10 +25,11 @@ RSpec.describe 'GET /telegram_link' do
     it 'returns 200 status and newly generated link with correct token' do
       expect(send_request.status).to eq(200)
 
-      response_link = JSON.parse(last_response.body)['link']
-      expect(response_link).to start_with('https://t.me/')
+      response_body = JSON.parse(last_response.body)
+      expect(response_body['link']).to start_with('https://t.me/')
+      expect(response_body['expires_in_seconds']).to eq(Telegram::CreateLink::TIMEOUT_SECONDS)
 
-      token = response_link.split('=').last
+      token = response_body['link'].split('=').last
       expect(RedisService.client.get(token)).to eq(authentication.user_id.to_s)
     end
   end

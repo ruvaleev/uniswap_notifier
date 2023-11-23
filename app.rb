@@ -39,7 +39,7 @@ patch '/clear_telegram' do
 end
 
 get '/telegram_link' do
-  { link: Telegram::CreateLink.new.call(current_user.id) }.to_json
+  Telegram::CreateLink.new.call(current_user.id).to_json
 end
 
 post '/telegram_callback' do
