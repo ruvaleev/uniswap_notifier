@@ -30,7 +30,7 @@ get '/check_auth' do
 end
 
 get '/check_telegram' do
-  { connected: current_user.telegram_chat_id.present? }.to_json
+  Telegram::Check.new.call(current_user).to_json
 end
 
 patch '/clear_telegram' do

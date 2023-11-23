@@ -17,7 +17,7 @@ module Telegram
     end
 
     def link(token)
-      "https://t.me/#{ENV.fetch('TG_BOT_USERNAME', nil)}?start=#{token}"
+      "#{BOT_URL}?start=#{token}"
     end
   end
 end

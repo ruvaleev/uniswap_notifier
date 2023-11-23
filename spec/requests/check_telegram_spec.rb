@@ -29,14 +29,20 @@ RSpec.describe 'GET /check_telegram' do
 
       it 'returns 200 status with {connected: true} in body' do
         expect(send_request.status).to eq(200)
-        expect(JSON.parse(last_response.body)).to eq({ 'connected' => true })
+        response_body = JSON.parse(last_response.body)
+
+        expect(response_body['connected']).to be_truthy
+        expect(response_body['link']).to eq(Telegram::BOT_URL)
       end
     end
 
     context 'when user has no :telegram_chat_id' do
       it 'returns 200 status with {connected: false} in body' do
         expect(send_request.status).to eq(200)
-        expect(JSON.parse(last_response.body)).to eq({ 'connected' => false })
+        response_body = JSON.parse(last_response.body)
+
+        expect(response_body['connected']).to be_falsy
+        expect(response_body['link']).to be_nil
       end
     end
   end
