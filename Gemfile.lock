@@ -1,12 +1,12 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    activemodel (7.0.4.3)
-      activesupport (= 7.0.4.3)
-    activerecord (7.0.4.3)
-      activemodel (= 7.0.4.3)
-      activesupport (= 7.0.4.3)
-    activesupport (7.0.4.3)
+    activemodel (7.0.8)
+      activesupport (= 7.0.8)
+    activerecord (7.0.8)
+      activemodel (= 7.0.8)
+      activesupport (= 7.0.8)
+    activesupport (7.0.8)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
@@ -54,6 +54,12 @@ GEM
       zeitwerk (~> 2.6)
     et-orbi (1.2.7)
       tzinfo
+    eth (0.5.10)
+      keccak (~> 1.3)
+      konstructor (~> 1.0)
+      openssl (>= 2.2, < 4.0)
+      rbsecp256k1 (~> 5.1)
+      scrypt (~> 3.0)
     factory_bot (6.2.1)
       activesupport (>= 5.0.0)
     faraday (2.7.4)
@@ -62,6 +68,10 @@ GEM
     faraday-multipart (1.0.4)
       multipart-post (~> 2)
     faraday-net_http (3.0.2)
+    ffi (1.15.5)
+    ffi-compiler (1.0.1)
+      ffi (>= 1.0.0)
+      rake
     fugit (1.8.1)
       et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
@@ -76,31 +86,45 @@ GEM
     httparty (0.21.0)
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
-    i18n (1.12.0)
+    i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
     json (2.6.3)
+    keccak (1.3.1)
+    konstructor (1.0.2)
     method_source (1.0.0)
     mini_mime (1.1.2)
-    minitest (5.18.0)
+    mini_portile2 (2.8.2)
+    minitest (5.20.0)
     multi_xml (0.6.0)
     multipart-post (2.3.0)
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
+    nio4r (2.6.1)
+    openssl (3.1.0)
     parallel (1.22.1)
     parser (3.2.2.0)
       ast (~> 2.4.1)
     pg (1.4.6)
+    pkg-config (1.5.2)
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
     public_suffix (5.0.1)
+    puma (6.4.0)
+      nio4r (~> 2.0)
     raabro (1.4.0)
     rack (2.2.6.4)
     rack-protection (3.0.6)
       rack
+    rack-test (2.1.0)
+      rack (>= 1.3)
     rainbow (3.1.1)
     rake (13.0.6)
+    rbsecp256k1 (5.1.1)
+      mini_portile2 (~> 2.8)
+      pkg-config (~> 1.5)
+      rubyzip (~> 2.3)
     redis (5.0.6)
       redis-client (>= 0.9.0)
     redis-client (0.14.1)
@@ -145,16 +169,19 @@ GEM
       rubocop-capybara (~> 2.17)
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
+    rubyzip (2.3.2)
     rufus-scheduler (3.8.2)
       fugit (~> 1.1, >= 1.1.6)
+    scrypt (3.0.7)
+      ffi-compiler (>= 1.0, < 2.0)
     securerandom (0.2.2)
     shoulda-matchers (5.3.0)
       activesupport (>= 5.2.0)
-    sidekiq (7.0.9)
+    sidekiq (7.2.0)
       concurrent-ruby (< 2)
       connection_pool (>= 2.3.0)
       rack (>= 2.2.4)
-      redis-client (>= 0.11.0)
+      redis-client (>= 0.14.0)
     sidekiq-scheduler (5.0.2)
       rufus-scheduler (~> 3.2)
       sidekiq (>= 6, < 8)
@@ -189,11 +216,13 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activesupport (>= 7.0.7.1)
   bcrypt
   bundle-audit
   database_cleaner-active_record
   database_consistency
   dotenv
+  eth
   factory_bot
   google-protobuf
   grpc (~> 1.55)
@@ -201,6 +230,8 @@ DEPENDENCIES
   httparty (>= 0.21.0)
   pg
   pry
+  puma (>= 6.3.1)
+  rack-test
   rake
   redis
   require_all
@@ -211,8 +242,9 @@ DEPENDENCIES
   rubocop-rspec
   securerandom
   shoulda-matchers
-  sidekiq
+  sidekiq (>= 7.1.3)
   sidekiq-scheduler
+  sinatra
   sinatra-activerecord
   strong_migrations
   telegram-bot-ruby
