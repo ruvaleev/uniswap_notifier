@@ -43,6 +43,7 @@ get '/telegram_link' do
 end
 
 post '/telegram_callback' do
+  puts "PARAMS: #{params}"
   Telegram::HandleCallback.new.call(params)
   200
 end
@@ -71,7 +72,8 @@ def set_auth_token(address, ip_address)
       value: Users::Authenticate.new.call(address, ip_address),
       expires: 1.hour.since,
       secure: true,
-      http_only: true
+      http_only: true,
+      same_site: :none
     }
   )
 end
