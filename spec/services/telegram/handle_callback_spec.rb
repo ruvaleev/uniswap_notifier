@@ -33,5 +33,11 @@ RSpec.describe Telegram::HandleCallback do
 
       it { is_expected.to be_nil }
     end
+
+    context 'when callback_body is empty' do
+      let(:callback_body) { {} }
+
+      it { is_expected.to be_nil }
+    end
   end
 end

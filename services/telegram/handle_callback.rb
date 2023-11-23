@@ -3,6 +3,8 @@
 module Telegram
   class HandleCallback
     def call(callback_body)
+      return unless callback_body['message']
+
       handle(callback_body, callback_body['message']['text'])
     end
 

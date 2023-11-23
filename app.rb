@@ -43,8 +43,9 @@ get '/telegram_link' do
 end
 
 post '/telegram_callback' do
-  puts "PARAMS: #{params}"
-  Telegram::HandleCallback.new.call(params)
+  Telegram::HandleCallback.new.call(
+    JSON.parse(request.body.read)
+  )
   200
 end
 
