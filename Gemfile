@@ -2,6 +2,7 @@
 
 source 'https://rubygems.org'
 
+gem 'activesupport', '>= 7.0.7.1'
 gem 'bcrypt'
 gem 'bundle-audit'
 gem 'dotenv'
@@ -11,11 +12,11 @@ gem 'grpc', '~> 1.55'
 gem 'grpc-tools'
 gem 'httparty', '>= 0.21.0'
 gem 'pg'
-gem 'puma'
+gem 'puma', '>= 6.3.1'
 gem 'rake'
 gem 'redis'
 gem 'require_all'
-gem 'sidekiq'
+gem 'sidekiq', '>= 7.1.3'
 gem 'sidekiq-scheduler'
 gem 'sinatra', require: false
 gem 'sinatra-activerecord'
