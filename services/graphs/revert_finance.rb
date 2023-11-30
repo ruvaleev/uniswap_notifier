@@ -3,23 +3,18 @@
 module Graphs
   class RevertFinance
     POSITIONS_FIELDS = %w[
-      amountCollectedUSD
       amountDepositedUSD
-      amountWithdrawnUSD
-      collectedFeesToken0
-      collectedFeesToken1
-      collectedToken0
-      collectedToken1
       depositedToken0
       depositedToken1
       feeGrowthInside0LastX128
       feeGrowthInside1LastX128
       id
       liquidity
+      pool{id tick sqrtPrice feeGrowthGlobal0X128 feeGrowthGlobal1X128}
       tickLower
       tickUpper
-      withdrawnToken0
-      withdrawnToken1
+      token0{symbol id decimals}
+      token1{symbol id decimals}
       owner
     ].join(' ').freeze
 

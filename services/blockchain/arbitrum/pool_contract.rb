@@ -15,12 +15,9 @@ module Blockchain
         @client = Eth::Client.create(RPC_ENDPOINT)
       end
 
-      def fee_growth_global_0_x_128
-        BigDecimal(client.call(contract, 'feeGrowthGlobal0X128'))
-      end
-
-      def fee_growth_global_1_x_128
-        BigDecimal(client.call(contract, 'feeGrowthGlobal1X128'))
+      def ticks(tick)
+        res = client.call(contract, 'ticks', tick)
+        Tick.new(res[2], res[3])
       end
     end
   end

@@ -29,33 +29,21 @@ RSpec.describe Blockchain::Arbitrum::PoolContract do
   let(:contract) { described_class.new(address) }
   let(:address) { rand_blockchain_address }
 
-  describe '#fee_growth_global_0_x128' do
-    subject(:fee_growth_global_0_x_128) { contract.fee_growth_global_0_x_128 }
+  describe '#ticks' do
+    subject(:ticks) { contract.ticks(tick) }
+
+    let(:tick) { 258_420 }
 
     include_context 'with mocked RPC request' do
-      let(:fixture_path) { 'spec/fixtures/blockchain/arbitrum/pool_contract/fee_growth_global_0_x128/success.json' }
+      let(:fixture_path) { 'spec/fixtures/blockchain/arbitrum/pool_contract/ticks/success.json' }
     end
 
-    context 'when contract returned successful response' do
-      it 'makes proper request and returns proper response' do
-        expect(fee_growth_global_0_x_128).to eq(BigDecimal('16768236117016105549879546996107'))
-      end
-    end
-
-    it_behaves_like 'raises proper error when RPC request is unsuccessful'
-  end
-
-  describe '#fee_growth_global_1_x128' do
-    subject(:fee_growth_global_1_x_128) { contract.fee_growth_global_1_x_128 }
-
-    include_context 'with mocked RPC request' do
-      let(:fixture_path) { 'spec/fixtures/blockchain/arbitrum/pool_contract/fee_growth_global_1_x128/success.json' }
-    end
-
-    context 'when contract returned successful response' do
-      it 'makes proper request and returns proper response' do
-        expect(fee_growth_global_1_x_128).to eq(BigDecimal('2470861406833279021277638089933409415314403'))
-      end
+    it 'returns properly initialized Ticker object' do
+      expect(ticks).to be_a(Tick)
+      expect(ticks.fee_growth_outside_0_x_128).to be_a(BigDecimal)
+      expect(ticks.fee_growth_outside_0_x_128).to eq(BigDecimal('14434802355389936311118482405690'))
+      expect(ticks.fee_growth_outside_1_x_128).to be_a(BigDecimal)
+      expect(ticks.fee_growth_outside_1_x_128).to eq(BigDecimal('2042377118337089894153321452778770940597754'))
     end
 
     it_behaves_like 'raises proper error when RPC request is unsuccessful'
