@@ -2,6 +2,9 @@
 
 module Graphs
   class RevertFinance
+    class ApiError < StandardError; end
+    POOLS_FIELDS = %w[tick id].join(' ').freeze
+
     POSITIONS_FIELDS = %w[
       amountDepositedUSD
       depositedToken0
@@ -25,30 +28,49 @@ module Graphs
       tickUpper
     ].join(' ').freeze
 
+    def pool(id, block_number)
+      make_request(
+        build_pool_body(id:, block_number:)
+      )['data']['pools'].first
+    end
+
     def positions(owner_address)
-      response = make_request(
+      make_request(
         build_positions_body(
           where: positions_where_clause(owner_address),
           fields: POSITIONS_FIELDS
         )
       )
-      JSON.parse(response.body)
     end
 
     def positions_tickers(owner_address, id_not_in: [])
-      response = make_request(
+      make_request(
         build_positions_body(
           where: positions_tickers_where_clause(owner_address, id_not_in),
           fields: POSITIONS_TICKERS_FIELDS
         )
       )
-      JSON.parse(response.body)
     end
 
     private
 
+    def build_pool_body(id:, block_number:)
+      { query: pools_query(id:, block_number:) }.to_json
+    end
+
     def build_positions_body(where:, fields:)
       { query: positions_query(where:, fields:) }.to_json
+    end
+
+    def pools_query(id:, block_number:)
+      <<~GQL
+        {
+          pools(
+            block: {number: #{block_number}}
+            where: {id: "#{id}"}
+          ) {#{POOLS_FIELDS}}
+        }
+      GQL
     end
 
     def positions_tickers_where_clause(owner_address, id_not_in)
@@ -76,7 +98,19 @@ module Graphs
 
       request = Net::HTTP::Post.new(uri.path, 'Content-Type' => 'application/json', 'Accept' => 'json')
       request.body = body
-      http.request(request)
+
+      parse_response(
+        http.request(request)
+      )
+    end
+
+    def parse_response(response)
+      raise ApiError, response.body unless response.is_a?(Net::HTTPSuccess)
+
+      parsed_body = JSON.parse(response.body)
+      raise ApiError, parsed_body['errors'].to_json if parsed_body['errors']
+
+      parsed_body
     end
 
     def uri

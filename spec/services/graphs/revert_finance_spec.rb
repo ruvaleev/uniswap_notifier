@@ -7,8 +7,45 @@ RSpec.describe Graphs::RevertFinance do
 
   let(:owner_address) { SecureRandom.hex(21) }
   let(:uri) { 'https://api.thegraph.com/subgraphs/name/revert-finance/uniswap-v3-arbitrum' }
+  let(:response_status) { 200 }
 
-  before { stub_request(:post, uri).to_return(body: response_body, status: 200) }
+  before { stub_request(:post, uri).to_return(body: response_body, status: response_status) }
+
+  describe '#pool' do
+    subject(:pool) { service.pool(id, block_number) }
+
+    let(:id) { '0xc6f780497a95e246eb9449f5e4770916dcd6396a' }
+    let(:block_number) { 132_099_846 }
+    let(:response_body) { File.read('spec/fixtures/graphs/revert_finance/pool/200_success.json') }
+
+    context 'when response has 200 status code' do
+      it 'calls the correct API with the correct body and returns the correct response' do
+        expect(pool).to eq(JSON.parse(response_body)['data']['pools'].first)
+        expect(
+          a_request(:post, uri).with do |req|
+            req.body.include?(id) && req.body.include?(described_class::POOLS_FIELDS)
+          end
+        ).to have_been_made.once
+      end
+
+      context 'when response body has an error' do
+        let(:response_body) { File.read('spec/fixtures/graphs/revert_finance/pool/200_error.json') }
+
+        it 'raises proper error' do
+          expect { pool }.to raise_error(described_class::ApiError, JSON.parse(response_body)['errors'].to_json)
+        end
+      end
+    end
+
+    context 'when response has error status code' do
+      let(:response_status) { 400 }
+      let(:response_body) { File.read('spec/fixtures/graphs/revert_finance/pool/400_error.json') }
+
+      it 'raises proper error' do
+        expect { pool }.to raise_error(described_class::ApiError, response_body)
+      end
+    end
+  end
 
   describe '#positions' do
     subject(:positions) { service.positions(owner_address) }
