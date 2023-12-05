@@ -40,7 +40,8 @@ RSpec.describe Positions::CheckByOwnerAddress do
     end
 
     context 'when there are positions already in db' do
-      let(:user) { create(:user, address:) }
+      let(:wallet) { create(:wallet, address:) }
+      let(:user) { wallet.user }
 
       before { notification_status }
 

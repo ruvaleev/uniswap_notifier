@@ -12,13 +12,5 @@ RSpec.describe Telegram::Delete do
     it "clears user's :telegram_chat_id field" do
       expect { call_service }.to change(user, :telegram_chat_id).from(telegram_chat_id).to(nil)
     end
-
-    context 'when update was unsuccessful' do
-      let(:user) { build(:user, address: nil, telegram_chat_id:) }
-
-      it 'raises proper error' do
-        expect { call_service }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
   end
 end

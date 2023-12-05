@@ -57,13 +57,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_28_135550) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "address", null: false
     t.string "telegram_chat_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["address"], name: "index_users_on_address", unique: true
+  end
+
+  create_table "wallets", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "address", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["address"], name: "index_wallets_on_address", unique: true
+    t.index ["user_id"], name: "index_wallets_on_user_id"
   end
 
   add_foreign_key "authentications", "users"
   add_foreign_key "notification_statuses", "users"
+  add_foreign_key "wallets", "users"
 end

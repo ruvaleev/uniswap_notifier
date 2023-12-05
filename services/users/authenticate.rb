@@ -5,20 +5,13 @@ module Users
     MAX_AUTHENTICATIONS = 2
 
     def call(address, ip_address)
-      user = find_or_create_user(address)
+      user = Users::FindOrCreateByAddress.new.call(address)
       authentication = Authentications::Create.new.call(user, ip_address)
       clear_extra_authentications(user)
       authentication.token
     end
 
     private
-
-    def find_or_create_user(address)
-      user = User.find_or_initialize_by(address:)
-      user.save unless user.persisted?
-
-      user
-    end
 
     def clear_extra_authentications(user)
       user.authentications
