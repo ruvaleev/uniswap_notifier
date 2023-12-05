@@ -10,7 +10,7 @@ RSpec.describe CalculateFees do
 
     context 'with same decimals' do
       let(:position) do
-        V2Position.new(
+        Position.new(
           fee_growth_inside_last_x128_0: BigDecimal('69152337145849472040338377168383236'),
           fee_growth_inside_last_x128_1: BigDecimal('117001692319817971649209116374655145049'),
           liquidity: BigDecimal('7108218528222899361894'),
@@ -35,7 +35,7 @@ RSpec.describe CalculateFees do
 
     context 'with different decimals' do
       let(:position) do
-        V2Position.new(
+        Position.new(
           fee_growth_inside_last_x128_0: BigDecimal('33819274971982470552721340282569211455911'),
           fee_growth_inside_last_x128_1: BigDecimal('58577573406703228483069725719999'),
           liquidity: BigDecimal('477550033551699'),
@@ -60,7 +60,7 @@ RSpec.describe CalculateFees do
 
     context 'when current tick is out of range' do
       let(:position) do
-        V2Position.new(
+        Position.new(
           fee_growth_inside_last_x128_0:
             BigDecimal('115792089237316195423570985008687907848111843853796435050067843230047949334441'),
           fee_growth_inside_last_x128_1:
