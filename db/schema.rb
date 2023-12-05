@@ -10,9 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_28_135550) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_05_193042) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  # Custom types defined in this database.
+  # Note that some types may not work with other database engines. Be careful if changing database.
+  create_enum "portfolio_report_status", ["initialized", "positions_fetched", "prices_fetched", "completed", "failed"]
+  create_enum "position_report_status", ["initialized", "fees_info_fetched", "events_fetched", "completed", "fetched"]
 
   create_table "authentications", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -35,6 +40,28 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_28_135550) do
     t.index ["last_sent_at"], name: "index_notification_statuses_on_last_sent_at"
     t.index ["uniswap_id", "user_id"], name: "index_notification_statuses_on_uniswap_id_and_user_id", unique: true
     t.index ["user_id"], name: "index_notification_statuses_on_user_id"
+  end
+
+  create_table "portfolio_report_builds", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "initial_message_id", null: false
+    t.integer "summary_message_id"
+    t.jsonb "prices", default: {}, null: false
+    t.string "error_message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.enum "status", default: "initialized", null: false, enum_type: "portfolio_report_status"
+    t.index ["user_id"], name: "index_portfolio_report_builds_on_user_id"
+  end
+
+  create_table "position_report_builds", force: :cascade do |t|
+    t.bigint "portfolio_report_build_id", null: false
+    t.integer "message_id", null: false
+    t.string "error_message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.enum "status", default: "initialized", null: false, enum_type: "position_report_status"
+    t.index ["portfolio_report_build_id"], name: "index_position_report_builds_on_portfolio_report_build_id"
   end
 
   create_table "positions", force: :cascade do |t|
@@ -73,5 +100,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_28_135550) do
 
   add_foreign_key "authentications", "users"
   add_foreign_key "notification_statuses", "users"
+  add_foreign_key "portfolio_report_builds", "users"
+  add_foreign_key "position_report_builds", "portfolio_report_builds"
   add_foreign_key "wallets", "users"
 end

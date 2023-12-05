@@ -7,5 +7,6 @@ RSpec.describe User, type: :model do
 
   it { is_expected.to have_many(:authentications).dependent(:destroy) }
   it { is_expected.to have_many(:notification_statuses).dependent(:destroy) }
+  it { is_expected.to have_many(:portfolio_report_builds).dependent(:destroy) }
   it { is_expected.to have_many(:wallets).dependent(:destroy) }
 end
