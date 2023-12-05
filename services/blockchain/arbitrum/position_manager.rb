@@ -2,19 +2,14 @@
 
 module Blockchain
   module Arbitrum
-    class PositionManager
-      attr_reader :abi, :client, :contract
-
+    class PositionManager < Base
       ABI_PATH = File.expand_path('./abis/position_manager_abi.json', __dir__)
       ADDRESS = '0xc36442b4a4522e871399cd717abdd847ab11fe88'
       EVENT_NAMES = %w[Collect DecreaseLiquidity IncreaseLiquidity].freeze
       NAME = 'NonfungiblePositionManager'
 
       def initialize
-        file = File.read(ABI_PATH)
-        @abi = JSON.parse(file)
-        @contract = Eth::Contract.from_abi(address: ADDRESS, name: NAME, abi:)
-        @client = Eth::Client.create(RPC_ENDPOINT)
+        super(ADDRESS)
       end
 
       def logs(*position_ids)
