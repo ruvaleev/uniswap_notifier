@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreatePortfolioReportBuilds < ActiveRecord::Migration[7.0]
+class CreatePortfolioReports < ActiveRecord::Migration[7.0]
   def up
     safety_assured do
       execute <<-SQL.squish
@@ -14,9 +14,9 @@ class CreatePortfolioReportBuilds < ActiveRecord::Migration[7.0]
       SQL
     end
 
-    create_table :portfolio_report_builds do |t|
+    create_table :portfolio_reports do |t|
       t.references :user, null: false, foreign_key: true
-      t.integer :initial_message_id, null: false
+      t.integer :initial_message_id
       t.integer :summary_message_id
       t.jsonb :prices, null: false, default: {}
       t.string :error_message
@@ -24,11 +24,11 @@ class CreatePortfolioReportBuilds < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    add_column :portfolio_report_builds, :status, :portfolio_report_status, default: 'initialized', null: false
+    add_column :portfolio_reports, :status, :portfolio_report_status, default: 'initialized', null: false
   end
 
   def down
-    drop_table :portfolio_report_builds
+    drop_table :portfolio_reports
 
     safety_assured do
       execute <<-SQL

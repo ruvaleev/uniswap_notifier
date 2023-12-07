@@ -17,7 +17,7 @@ RSpec.describe Telegram::HandleCallback do
         before { RedisService.client.set(token, user.id) }
 
         it 'assigns chat_id to the user' do
-          expect { call_service }.to change { user.reload.telegram_chat_id }.from(nil).to('999887755')
+          expect { call_service }.to change { user.reload.telegram_chat_id }.from(nil).to(999_887_755)
         end
       end
 

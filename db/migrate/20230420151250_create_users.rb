@@ -3,7 +3,7 @@
 class CreateUsers < ActiveRecord::Migration[7.0]
   def change
     create_table :users do |t|
-      t.string :telegram_chat_id
+      t.integer :telegram_chat_id
 
       t.timestamps
     end

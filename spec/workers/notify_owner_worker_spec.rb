@@ -9,7 +9,7 @@ RSpec.describe NotifyOwnerWorker do
 
     let(:user) { create(:user, telegram_chat_id: chat_id) }
     let(:wallet) { create(:wallet, user:) }
-    let(:chat_id) { rand(100).to_s }
+    let(:chat_id) { rand(100) }
     let(:uniswap_id) { rand(100) }
     let(:message_type) { 'out_of_range' }
     let(:message) { "Your position is OUT OF RANGE (needs rebalancing): https://app.uniswap.org/#/pools/#{uniswap_id}" }

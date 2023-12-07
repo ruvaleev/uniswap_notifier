@@ -2,8 +2,6 @@
 
 module Positions
   class CheckByOwnerAddress
-    class NotFoundError < StandardError; end
-
     attr_reader :address, :threshold
 
     def initialize(address, threshold)

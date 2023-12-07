@@ -7,7 +7,7 @@ RSpec.describe Telegram::Delete do
     subject(:call_service) { described_class.new.call(user) }
 
     let(:user) { build(:user, telegram_chat_id:) }
-    let(:telegram_chat_id) { rand(100).to_s }
+    let(:telegram_chat_id) { rand(100) }
 
     it "clears user's :telegram_chat_id field" do
       expect { call_service }.to change(user, :telegram_chat_id).from(telegram_chat_id).to(nil)

@@ -34,10 +34,10 @@ module Graphs
       )['data']['pools'].first
     end
 
-    def positions(owner_address)
+    def positions(*owner_addresses)
       make_request(
         build_positions_body(
-          where: positions_where_clause(owner_address),
+          where: positions_where_clause(*owner_addresses),
           fields: POSITIONS_FIELDS
         )
       )
@@ -78,8 +78,8 @@ module Graphs
         (id_not_in.blank? ? '' : ", id_not_in: #{id_not_in}")
     end
 
-    def positions_where_clause(owner_address)
-      "owner: \"#{owner_address}\", liquidity_gt: 0"
+    def positions_where_clause(*owner_addresses)
+      "owner_in: #{owner_addresses}, liquidity_gt: 0"
     end
 
     def positions_query(where:, fields:)

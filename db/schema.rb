@@ -42,29 +42,30 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_05_193042) do
     t.index ["user_id"], name: "index_notification_statuses_on_user_id"
   end
 
-  create_table "portfolio_report_builds", force: :cascade do |t|
+  create_table "portfolio_reports", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.integer "initial_message_id", null: false
+    t.integer "initial_message_id"
     t.integer "summary_message_id"
     t.jsonb "prices", default: {}, null: false
     t.string "error_message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.enum "status", default: "initialized", null: false, enum_type: "portfolio_report_status"
-    t.index ["user_id"], name: "index_portfolio_report_builds_on_user_id"
+    t.index ["user_id"], name: "index_portfolio_reports_on_user_id"
   end
 
-  create_table "position_report_builds", force: :cascade do |t|
-    t.bigint "portfolio_report_build_id", null: false
-    t.integer "message_id", null: false
+  create_table "position_reports", force: :cascade do |t|
+    t.bigint "position_id", null: false
+    t.integer "message_id"
     t.string "error_message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.enum "status", default: "initialized", null: false, enum_type: "position_report_status"
-    t.index ["portfolio_report_build_id"], name: "index_position_report_builds_on_portfolio_report_build_id"
+    t.index ["position_id"], name: "index_position_reports_on_position_id"
   end
 
   create_table "positions", force: :cascade do |t|
+    t.bigint "portfolio_report_id", null: false
     t.integer "uniswap_id"
     t.integer "initial_tick"
     t.datetime "initial_timestamp", precision: nil
@@ -80,11 +81,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_05_193042) do
     t.jsonb "pool", default: {}, null: false
     t.jsonb "events", default: {}, null: false
     t.jsonb "fees_claims", default: {}, null: false
+    t.index ["portfolio_report_id"], name: "index_positions_on_portfolio_report_id"
     t.index ["uniswap_id"], name: "index_positions_on_uniswap_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "telegram_chat_id"
+    t.integer "telegram_chat_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -100,7 +102,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_05_193042) do
 
   add_foreign_key "authentications", "users"
   add_foreign_key "notification_statuses", "users"
-  add_foreign_key "portfolio_report_builds", "users"
-  add_foreign_key "position_report_builds", "portfolio_report_builds"
+  add_foreign_key "portfolio_reports", "users"
+  add_foreign_key "position_reports", "positions"
+  add_foreign_key "positions", "portfolio_reports"
   add_foreign_key "wallets", "users"
 end

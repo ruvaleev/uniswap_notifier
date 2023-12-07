@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreatePositionReportBuilds < ActiveRecord::Migration[7.0]
+class CreatePositionReports < ActiveRecord::Migration[7.0]
   def up
     safety_assured do
       execute <<-SQL.squish
@@ -14,19 +14,19 @@ class CreatePositionReportBuilds < ActiveRecord::Migration[7.0]
       SQL
     end
 
-    create_table :position_report_builds do |t|
-      t.references :portfolio_report_build, null: false, foreign_key: true
-      t.integer :message_id, null: false
+    create_table :position_reports do |t|
+      t.references :position, null: false, foreign_key: true
+      t.integer :message_id
       t.string :error_message
 
       t.timestamps
     end
 
-    add_column :position_report_builds, :status, :position_report_status, default: 'initialized', null: false
+    add_column :position_reports, :status, :position_report_status, default: 'initialized', null: false
   end
 
   def down
-    drop_table :position_report_builds
+    drop_table :position_reports
 
     safety_assured do
       execute <<-SQL
