@@ -2,7 +2,9 @@
 
 module Builders
   class PortfolioReport
-    def call(portfolio_report)
+    def call(portfolio_report) # rubocop:disable Metrics/MethodLength
+      portfolio_report.send_message
+
       case portfolio_report.status.to_sym
       when :initialized
         process_initialized_report(portfolio_report)
@@ -10,9 +12,9 @@ module Builders
         process_positions_fetched_report(portfolio_report)
       when :prices_fetched
         process_prices_fetched_report(portfolio_report)
+      when :events_fetched
+        process_events_fetched_report(portfolio_report)
       end
-
-      portfolio_report.send_message
     end
 
     private
@@ -31,6 +33,37 @@ module Builders
     end
 
     def process_prices_fetched_report(portfolio_report)
+      positions = portfolio_report.positions
+      uniswap_ids = positions.pluck(:uniswap_id)
+      logs = Blockchain::Arbitrum::PositionManager.new.logs(*uniswap_ids)
+      save_logs(positions, logs)
+      portfolio_report.update!(status: :events_fetched)
+      call(portfolio_report)
+    end
+
+    def save_logs(positions, logs) # rubocop:disable Metrics/MethodLength
+      return if positions.blank?
+
+      uniswap_ids = logs.keys
+      case_when_clause = uniswap_ids.map do |uniswap_id|
+        json_data = ActiveRecord::Base.connection.quote(logs[uniswap_id].to_json)
+        "WHEN uniswap_id = #{uniswap_id} THEN #{json_data}"
+      end.join(' ')
+      id_list = positions.pluck(:id).join(', ')
+
+      sql = <<-SQL.squish
+        UPDATE positions
+        SET events = CASE
+          #{case_when_clause}
+          ELSE events
+        END
+        WHERE id IN (#{id_list})
+      SQL
+
+      ActiveRecord::Base.connection.execute(sql)
+    end
+
+    def process_events_fetched_report(portfolio_report)
       positions = portfolio_report.positions
       threads = positions.each.with_object([]) do |pos, ar|
         ar << Thread.new { PositionReport.new.call(pos.report) }

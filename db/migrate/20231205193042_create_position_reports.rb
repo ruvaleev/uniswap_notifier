@@ -7,9 +7,9 @@ class CreatePositionReports < ActiveRecord::Migration[7.0]
         CREATE TYPE position_report_status AS ENUM (
           'initialized',
           'fees_info_fetched',
-          'events_fetched',
+          'historical_prices_fetched',
           'completed',
-          'fetched'
+          'failed'
         )
       SQL
     end

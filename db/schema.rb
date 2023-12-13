@@ -16,8 +16,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_05_193042) do
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
-  create_enum "portfolio_report_status", ["initialized", "positions_fetched", "prices_fetched", "completed", "failed"]
-  create_enum "position_report_status", ["initialized", "fees_info_fetched", "events_fetched", "completed", "fetched"]
+  create_enum "portfolio_report_status", ["initialized", "positions_fetched", "prices_fetched", "events_fetched", "completed", "failed"]
+  create_enum "position_report_status", ["initialized", "fees_info_fetched", "historical_prices_fetched", "completed", "failed"]
 
   create_table "authentications", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -75,7 +75,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_05_193042) do
     t.decimal "fee_growth_inside_last_x128_0"
     t.decimal "fee_growth_inside_last_x128_1"
     t.decimal "liquidity"
+    t.decimal "hold_usd_value"
     t.jsonb "liquidity_changes", default: {}, null: false
+    t.jsonb "collects", default: {}, null: false
+    t.jsonb "liquidity_decreases", default: {}, null: false
+    t.jsonb "liquidity_increases", default: {}, null: false
     t.jsonb "token_0", default: {}, null: false
     t.jsonb "token_1", default: {}, null: false
     t.jsonb "pool", default: {}, null: false

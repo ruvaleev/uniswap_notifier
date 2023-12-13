@@ -6,6 +6,24 @@ RSpec.describe Reports::Position, type: :model do
   it { is_expected.to belong_to(:portfolio_report) }
   it { is_expected.to have_one(:position_report).dependent(:destroy) }
 
+  describe '#divider_0' do
+    subject(:divider_0) { position.divider_0 }
+
+    let(:position) { build(:position, token_0: { 'decimals' => decimals }) }
+    let(:decimals) { rand(18) }
+
+    it { is_expected.to eq(10**decimals) }
+  end
+
+  describe '#divider_1' do
+    subject(:divider_1) { position.divider_1 }
+
+    let(:position) { build(:position, token_1: { 'decimals' => decimals }) }
+    let(:decimals) { rand(18) }
+
+    it { is_expected.to eq(10**decimals) }
+  end
+
   describe '#report' do
     subject(:report) { position.report }
 

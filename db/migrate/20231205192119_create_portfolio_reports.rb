@@ -8,6 +8,7 @@ class CreatePortfolioReports < ActiveRecord::Migration[7.0]
           'initialized',
           'positions_fetched',
           'prices_fetched',
+          'events_fetched',
           'completed',
           'failed'
         )

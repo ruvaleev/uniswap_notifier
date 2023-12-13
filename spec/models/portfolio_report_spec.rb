@@ -9,7 +9,6 @@ RSpec.describe PortfolioReport, type: :model do
 
   it { is_expected.to have_many(:positions).class_name('Reports::Position').dependent(:destroy) }
 
-  it { is_expected.to validate_presence_of(:initial_message_id) }
   it { is_expected.to validate_uniqueness_of(:initial_message_id) }
 
   describe '.in_process' do

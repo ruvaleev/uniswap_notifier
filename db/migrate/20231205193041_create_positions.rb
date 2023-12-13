@@ -15,7 +15,11 @@ class CreatePositions < ActiveRecord::Migration[7.0]
       t.decimal :fee_growth_inside_last_x128_0
       t.decimal :fee_growth_inside_last_x128_1
       t.decimal :liquidity
+      t.decimal :hold_usd_value
       t.jsonb :liquidity_changes, null: false, default: {}
+      t.jsonb :collects, null: false, default: {}
+      t.jsonb :liquidity_decreases, null: false, default: {}
+      t.jsonb :liquidity_increases, null: false, default: {}
       t.jsonb :token_0, null: false, default: {}
       t.jsonb :token_1, null: false, default: {}
       t.jsonb :pool, null: false, default: {}

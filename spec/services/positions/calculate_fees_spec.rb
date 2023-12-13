@@ -2,7 +2,7 @@
 
 require './spec/spec_helper'
 
-RSpec.describe CalculateFees do
+RSpec.describe Positions::CalculateFees do
   describe '#call' do
     subject(:call_service) { service.call }
 
