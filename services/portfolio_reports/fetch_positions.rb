@@ -45,7 +45,7 @@ module PortfolioReports
       <<-SQL.squish
         INSERT INTO positions (#{columns})
         VALUES #{values}
-        ON CONFLICT (uniswap_id)
+        ON CONFLICT (uniswap_id, portfolio_report_id)
         DO UPDATE SET
           liquidity = EXCLUDED.liquidity
         RETURNING id;

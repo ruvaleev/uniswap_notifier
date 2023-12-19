@@ -8,7 +8,7 @@ RSpec.describe Coingecko::GetHistoricalPrice do
 
     let(:symbol) { :WBTC }
     let(:date) { '01-10-2023'.to_date }
-    let(:cache_key) { "usd_price_#{symbol}_2023-10-01" }
+    let(:cache_key) { "usd_price_#{symbol}_01-10-2023" }
     let(:response_body) { File.read('spec/fixtures/coingecko/get_historical_price/success.json') }
     let(:status) { 200 }
 

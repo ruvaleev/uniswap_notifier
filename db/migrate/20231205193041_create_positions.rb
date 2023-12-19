@@ -5,7 +5,7 @@ class CreatePositions < ActiveRecord::Migration[7.0]
     create_table :positions do |t|
       # NOT CHANGING
       t.references :portfolio_report, null: false, foreign_key: true
-      t.integer :uniswap_id, index: { unique: true }
+      t.integer :uniswap_id
       t.integer :initial_tick
       t.timestamp :initial_timestamp
       t.string :owner # Use relateion
@@ -28,5 +28,7 @@ class CreatePositions < ActiveRecord::Migration[7.0]
       # Кажется, это не надо хранить в базе данных:
       # t.decimal :totalUsdValue
     end
+
+    add_index :positions, %i[uniswap_id portfolio_report_id], unique: true
   end
 end

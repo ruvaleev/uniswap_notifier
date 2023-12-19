@@ -18,5 +18,13 @@ RSpec.describe Blockchain::Arbitrum::PositionManager do
     end
 
     it_behaves_like 'raises proper error when RPC request is unsuccessful'
+
+    context 'when position_ids blank' do
+      let(:position_ids) { [] }
+
+      it 'raises proper error' do
+        expect { logs }.to raise_error(described_class::PositionsRequried)
+      end
+    end
   end
 end

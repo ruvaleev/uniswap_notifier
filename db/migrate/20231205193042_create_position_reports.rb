@@ -5,9 +5,8 @@ class CreatePositionReports < ActiveRecord::Migration[7.0]
     safety_assured do
       execute <<-SQL.squish
         CREATE TYPE position_report_status AS ENUM (
-          'initialized',
-          'fees_info_fetched',
-          'historical_prices_fetched',
+          'fees_info_fetching',
+          'history_analyzing',
           'completed',
           'failed'
         )
@@ -22,7 +21,7 @@ class CreatePositionReports < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    add_column :position_reports, :status, :position_report_status, default: 'initialized', null: false
+    add_column :position_reports, :status, :position_report_status, default: 'fees_info_fetching', null: false
   end
 
   def down

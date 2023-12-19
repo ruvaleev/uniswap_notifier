@@ -8,20 +8,27 @@ RSpec.describe Builders::Position::ParsedEvents do
     subject(:call_service) { service.call(position) }
 
     let(:service) { described_class.new }
-    let(:position) { create(:position, events: log_1001) }
+    let(:position) { build(:position, events: log_1001, portfolio_report:, token_0:, token_1:) }
+    let(:token_0) { { symbol: 'WETH', decimals: 18 } }
+    let(:token_1) { { symbol: 'ARB', decimals: 18 } }
+    let(:portfolio_report) { build(:portfolio_report, prices:) }
+    let(:prices) { { 'WETH' => 2000, 'ARB' => 1 } }
 
     include_context 'with mocked block_timestamp'
     include_context 'with mocked Coingecko::GetHistoricalPrice'
     include_context 'with mocked positions logs'
 
     it 'enriches events with historical prices and fills proper fields in position with results' do
-      expect(call_service).to eq(position)
-      expect(position.collects.to_json).to eq(collects_1001.to_json)
-      expect(position.liquidity_decreases.to_json).to eq(liquidity_decreases_1001.to_json)
-      expect(position.liquidity_increases.to_json).to eq(liquidity_increases_1001.to_json)
-      expect(position.fees_claims.to_json).to eq(fees_claims_1001.to_json)
-      expect(position.liquidity_changes).to eq({ '1698175159' => -50, '1700743351' => -50 })
-      expect(position.hold_usd_value).to eq(7770.92)
+      expect(call_service).to eq(
+        {
+          collects: collects_1001,
+          liquidity_decreases: liquidity_decreases_1001,
+          liquidity_increases: liquidity_increases_1001,
+          fees_claims: fees_claims_1001,
+          liquidity_changes: { 1_698_175_159 => -50, 1_700_743_351 => -50 },
+          hold_usd_value: 9775.43
+        }
+      )
     end
 
     context 'when position evetns are blank' do

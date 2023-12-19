@@ -228,6 +228,7 @@ DEPENDENCIES
   grpc (~> 1.55)
   grpc-tools
   httparty (>= 0.21.0)
+  i18n
   pg
   pry
   puma (>= 6.3.1)

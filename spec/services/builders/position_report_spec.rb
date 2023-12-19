@@ -12,8 +12,10 @@ RSpec.describe Builders::PositionReport do
     let(:service) { described_class.new }
     let(:report) { position_report }
     let(:position_report) { create(:position_report, status:, position:) }
-    let(:position) { build(:position) }
+    let(:position) { build(:position, **position_params) }
+    let(:position_params) { {} }
 
+    include_context 'with mocked send_message service'
     include_context 'with recursively called service'
 
     context 'when report is in one of completed statuses' do
@@ -27,14 +29,18 @@ RSpec.describe Builders::PositionReport do
       context 'when status: :completed' do
         let(:status) { :completed }
 
+        include_context 'with mocked position_report build_message service'
+
         it_behaves_like 'sends report'
         it_behaves_like "doesn't call itself recursively"
       end
     end
 
     context 'when report is in one of processing statuses' do
-      context 'when status: :initialized' do # rubocop:disable RSpec/MultipleMemoizedHelpers
-        let(:status) { :initialized }
+      context 'when status: :fees_info_fetching' do # rubocop:disable RSpec/MultipleMemoizedHelpers
+        let(:status) { :fees_info_fetching }
+        let(:position_params) { { pool: { id: pool_address } } }
+        let(:pool_address) { rand_blockchain_address }
 
         let(:tick_lower) { Tick.new(1, 2) }
         let(:tick_upper) { Tick.new(1, 2) }
@@ -46,7 +52,7 @@ RSpec.describe Builders::PositionReport do
 
         before do
           allow(Blockchain::Arbitrum::PoolContract).to receive(:new)
-            .with(position.owner).and_return(pool_contract_double)
+            .with(pool_address).and_return(pool_contract_double)
           allow(pool_contract_double).to receive(:ticks).with(position.tick_lower).and_return(tick_lower)
           allow(pool_contract_double).to receive(:ticks).with(position.tick_upper).and_return(tick_upper)
           allow(Positions::CalculateFees).to receive(:new)
@@ -57,7 +63,7 @@ RSpec.describe Builders::PositionReport do
 
         it_behaves_like 'sends report'
         it_behaves_like 'calls itself recursively'
-        it_behaves_like 'updates status to', 'fees_info_fetched'
+        it_behaves_like 'updates status to', 'history_analyzing'
 
         it 'fetches info about ticks, calculates fees and writes results to the DB' do
           call_service
@@ -70,9 +76,13 @@ RSpec.describe Builders::PositionReport do
       end
     end
 
-    context 'when status: :fees_info_fetched' do
-      let(:status) { :fees_info_fetched }
+    context 'when status: :history_analyzing' do
+      let(:status) { :history_analyzing }
       let(:position) { create(:position, events: log_1001) }
+      let(:pool_response_body) { File.read('spec/fixtures/graphs/revert_finance/pool/200_success.json') }
+      let(:pool_uri) { 'https://api.thegraph.com/subgraphs/name/revert-finance/uniswap-v3-arbitrum' }
+
+      before { stub_request(:post, pool_uri).to_return(body: pool_response_body, status: 200) }
 
       include_context 'with mocked block_timestamp'
       include_context 'with mocked Coingecko::GetHistoricalPrice'
@@ -88,8 +98,10 @@ RSpec.describe Builders::PositionReport do
         expect(position.liquidity_decreases.to_json).to eq(liquidity_decreases_1001.to_json)
         expect(position.liquidity_increases.to_json).to eq(liquidity_increases_1001.to_json)
         expect(position.fees_claims.to_json).to eq(fees_claims_1001.to_json)
-        expect(position.liquidity_changes).to eq({ '1698175159' => -50, '1700743351' => -50 })
-        expect(position.hold_usd_value).to eq(7770.92)
+        expect(position.liquidity_changes).to eq(liquidity_changes_1001)
+        expect(position.hold_usd_value).to eq(11_434.84)
+        expect(position.initial_timestamp).to eq(Time.at(1_695_009_234))
+        expect(position.initial_tick).to eq(76_046)
       end
     end
   end

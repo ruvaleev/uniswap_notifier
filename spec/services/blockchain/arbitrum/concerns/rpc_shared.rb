@@ -167,6 +167,7 @@ RSpec.shared_context 'with mocked positions logs' do
       }
     ]
   end
+  let(:liquidity_changes_1001) { { '1698175159' => -50, '1700743351' => -50 } }
 
   include_context 'with mocked RPC request' do
     let(:fixture_path) { 'spec/fixtures/blockchain/arbitrum/position_manager/logs/success.json' }

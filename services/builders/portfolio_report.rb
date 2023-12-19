@@ -3,41 +3,43 @@
 module Builders
   class PortfolioReport
     def call(portfolio_report) # rubocop:disable Metrics/MethodLength
-      portfolio_report.send_message
+      portfolio_report.send_initial_message
 
       case portfolio_report.status.to_sym
-      when :initialized
-        process_initialized_report(portfolio_report)
-      when :positions_fetched
-        process_positions_fetched_report(portfolio_report)
-      when :prices_fetched
-        process_prices_fetched_report(portfolio_report)
-      when :events_fetched
-        process_events_fetched_report(portfolio_report)
+      when :positions_fetching
+        process_positions_fetching_report(portfolio_report)
+      when :prices_fetching
+        process_prices_fetching_report(portfolio_report)
+      when :events_fetching
+        process_events_fetching_report(portfolio_report)
+      when :results_analyzing
+        process_results_analyzing_report(portfolio_report)
+      when :completed
+        portfolio_report.send_summary_message
       end
     end
 
     private
 
-    def process_initialized_report(portfolio_report)
+    def process_positions_fetching_report(portfolio_report)
       PortfolioReports::FetchPositions.new(portfolio_report).call
-      portfolio_report.update!(status: :positions_fetched)
+      portfolio_report.update!(status: :prices_fetching)
       call(portfolio_report)
     end
 
-    def process_positions_fetched_report(portfolio_report)
+    def process_prices_fetching_report(portfolio_report)
       symbols = portfolio_report.positions.pluck(:token_0, :token_1).flatten.pluck('symbol').uniq
       prices = Coingecko::GetUsdPrice.new.call(*symbols)
-      portfolio_report.update!(prices:, status: :prices_fetched)
+      portfolio_report.update!(prices:, status: :events_fetching)
       call(portfolio_report)
     end
 
-    def process_prices_fetched_report(portfolio_report)
+    def process_events_fetching_report(portfolio_report)
       positions = portfolio_report.positions
       uniswap_ids = positions.pluck(:uniswap_id)
       logs = Blockchain::Arbitrum::PositionManager.new.logs(*uniswap_ids)
       save_logs(positions, logs)
-      portfolio_report.update!(status: :events_fetched)
+      portfolio_report.update!(status: :results_analyzing)
       call(portfolio_report)
     end
 
@@ -63,14 +65,17 @@ module Builders
       ActiveRecord::Base.connection.execute(sql)
     end
 
-    def process_events_fetched_report(portfolio_report)
-      positions = portfolio_report.positions
-      threads = positions.each.with_object([]) do |pos, ar|
+    def process_results_analyzing_report(portfolio_report)
+      threads = Reports::Position.where(portfolio_report_id: portfolio_report.id)
+                                 .find_each.with_object([]) do |pos, ar|
         ar << Thread.new { PositionReport.new.call(pos.report) }
       end
       threads.each(&:join)
 
       portfolio_report.update!(status: :completed)
+      portfolio_report.positions.reload
+
+      call(portfolio_report)
     end
   end
 end

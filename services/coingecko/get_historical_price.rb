@@ -4,7 +4,7 @@ module Coingecko
   class GetHistoricalPrice < Base
     def call(symbol, date)
       coin_id = to_coin_id(symbol)
-      price = fetch_historical_price(symbol, coin_id, date.to_s)
+      price = fetch_historical_price(symbol, coin_id, date.strftime('%d-%m-%Y'))
 
       BigDecimal(price)
     end

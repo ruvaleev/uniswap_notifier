@@ -3,17 +3,25 @@
 module Builders
   module Position
     class HoldUsdValue
-      include EventParseable
+      def call(initial_increase, liquidity_changes, token_0_price, token_1_price)
+        token_0_amount = initial_increase[:amount_0]
+        token_1_amount = initial_increase[:amount_1]
 
-      def call(initial_increase, liquidity_changes)
-        usd_amount = overall_usd_amount(initial_increase)
+        (
+          ((token_0_amount * token_0_price) + (token_1_amount * token_1_price)) *
+            changes_coefficient(liquidity_changes)
+        ).round(2)
+      end
 
+      private
+
+      def changes_coefficient(liquidity_changes)
+        coef = BigDecimal('1')
         timestamps = liquidity_changes.keys.sort
         timestamps.each do |timestamp|
-          usd_amount += usd_amount * liquidity_changes[timestamp] / 100
+          coef += coef * liquidity_changes[timestamp] / 100
         end
-
-        usd_amount.round(2)
+        coef
       end
     end
   end

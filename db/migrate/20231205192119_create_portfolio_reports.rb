@@ -5,10 +5,10 @@ class CreatePortfolioReports < ActiveRecord::Migration[7.0]
     safety_assured do
       execute <<-SQL.squish
         CREATE TYPE portfolio_report_status AS ENUM (
-          'initialized',
-          'positions_fetched',
-          'prices_fetched',
-          'events_fetched',
+          'positions_fetching',
+          'prices_fetching',
+          'events_fetching',
+          'results_analyzing',
           'completed',
           'failed'
         )
@@ -25,7 +25,7 @@ class CreatePortfolioReports < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    add_column :portfolio_reports, :status, :portfolio_report_status, default: 'initialized', null: false
+    add_column :portfolio_reports, :status, :portfolio_report_status, default: 'positions_fetching', null: false
   end
 
   def down

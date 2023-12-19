@@ -1,0 +1,22 @@
+{
+  "ok": true,                   
+  "result": {
+    "message_id": 2821,         
+    "from": {
+      "id": 999887744,
+      "is_bot": true,
+      "first_name": "tg_bot_first_name",
+      "username": "tg_bot_username"
+    },
+  "chat": {
+    "id": 999887755,
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "username": "username",
+    "type": "private"
+  },
+  "date": 1702487630,
+  "edit_date": 1702487631,    
+  "text": "edit_message_text"
+  }
+}

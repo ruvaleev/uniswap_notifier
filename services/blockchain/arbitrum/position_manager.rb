@@ -3,6 +3,8 @@
 module Blockchain
   module Arbitrum
     class PositionManager < Base
+      class PositionsRequried < StandardError; end
+
       ABI_PATH = File.expand_path('./abis/position_manager_abi.json', __dir__)
       ADDRESS = '0xc36442b4a4522e871399cd717abdd847ab11fe88'
       EVENT_NAMES = %w[Collect DecreaseLiquidity IncreaseLiquidity].freeze
@@ -13,6 +15,8 @@ module Blockchain
       end
 
       def logs(*position_ids)
+        raise PositionsRequried if position_ids.blank?
+
         events_datas = get_event_datas(*EVENT_NAMES)
         signatures_ids = get_signatures_ids(position_ids)
         result_logs = request_logs(events_datas.keys, signatures_ids.keys)

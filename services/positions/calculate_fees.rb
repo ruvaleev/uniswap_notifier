@@ -22,8 +22,8 @@ module Positions
       uncollected_fees_0, uncollected_fees_1 = calculate_uncollected_fees(within_range_0, within_range_1)
 
       {
-        fees_0: human_readable_fees(uncollected_fees_0, position.token_0['decimals']),
-        fees_1: human_readable_fees(uncollected_fees_1, position.token_1['decimals'])
+        fees_0: human_readable_fees(uncollected_fees_0, position.token_0['decimals'].to_i),
+        fees_1: human_readable_fees(uncollected_fees_1, position.token_1['decimals'].to_i)
       }
     end
 

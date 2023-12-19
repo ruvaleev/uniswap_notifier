@@ -16,8 +16,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_05_193042) do
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
-  create_enum "portfolio_report_status", ["initialized", "positions_fetched", "prices_fetched", "events_fetched", "completed", "failed"]
-  create_enum "position_report_status", ["initialized", "fees_info_fetched", "historical_prices_fetched", "completed", "failed"]
+  create_enum "portfolio_report_status", ["positions_fetching", "prices_fetching", "events_fetching", "results_analyzing", "completed", "failed"]
+  create_enum "position_report_status", ["fees_info_fetching", "history_analyzing", "completed", "failed"]
 
   create_table "authentications", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -50,7 +50,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_05_193042) do
     t.string "error_message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.enum "status", default: "initialized", null: false, enum_type: "portfolio_report_status"
+    t.enum "status", default: "positions_fetching", null: false, enum_type: "portfolio_report_status"
     t.index ["user_id"], name: "index_portfolio_reports_on_user_id"
   end
 
@@ -60,7 +60,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_05_193042) do
     t.string "error_message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.enum "status", default: "initialized", null: false, enum_type: "position_report_status"
+    t.enum "status", default: "fees_info_fetching", null: false, enum_type: "position_report_status"
     t.index ["position_id"], name: "index_position_reports_on_position_id"
   end
 
@@ -86,7 +86,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_05_193042) do
     t.jsonb "events", default: {}, null: false
     t.jsonb "fees_claims", default: {}, null: false
     t.index ["portfolio_report_id"], name: "index_positions_on_portfolio_report_id"
-    t.index ["uniswap_id"], name: "index_positions_on_uniswap_id", unique: true
+    t.index ["uniswap_id", "portfolio_report_id"], name: "index_positions_on_uniswap_id_and_portfolio_report_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|

@@ -19,10 +19,10 @@ RSpec.describe User, type: :model do
         create(:portfolio_report, user:, status: :failed)
       end
 
-      it 'creates new portfolio report in :initialized status and returns it' do
+      it 'creates new portfolio report in :positions_fetching status and returns it' do
         expect { portfolio_report }.to change(PortfolioReport, :count).by(1)
         expect(portfolio_report).to be_a(PortfolioReport)
-        expect(portfolio_report).to have_attributes(user:, status: 'initialized')
+        expect(portfolio_report).to have_attributes(user:, status: 'positions_fetching')
       end
     end
 
@@ -36,20 +36,26 @@ RSpec.describe User, type: :model do
         end
       end
 
-      context 'when status: :initialized' do
-        let(:status) { :initialized }
+      context 'when status: :positions_fetching' do
+        let(:status) { :positions_fetching }
 
         it_behaves_like "doesn't create new portfolio report, but returns existing one"
       end
 
-      context 'when status: :positions_fetched' do
-        let(:status) { :positions_fetched }
+      context 'when status: :prices_fetching' do
+        let(:status) { :prices_fetching }
 
         it_behaves_like "doesn't create new portfolio report, but returns existing one"
       end
 
-      context 'when status: :prices_fetched' do
-        let(:status) { :prices_fetched }
+      context 'when status: :events_fetching' do
+        let(:status) { :events_fetching }
+
+        it_behaves_like "doesn't create new portfolio report, but returns existing one"
+      end
+
+      context 'when status: :results_analyzing' do
+        let(:status) { :results_analyzing }
 
         it_behaves_like "doesn't create new portfolio report, but returns existing one"
       end
