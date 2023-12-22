@@ -3,6 +3,7 @@
 module Positions
   class CalculateAmounts
     Q96 = BigDecimal(2)**96
+    MAX_PRECISION = 18
 
     attr_reader :current_sqrt_price, :current_tick, :liquidity,
                 :position, :sqrt_ratio_lower, :sqrt_ratio_upper
@@ -47,7 +48,7 @@ module Positions
     end
 
     def calculate_amount_0(sqrt_ratio)
-      (liquidity * ((sqrt_ratio_upper - sqrt_ratio) / (sqrt_ratio * sqrt_ratio_upper))).floor
+      (liquidity * ((sqrt_ratio_upper - sqrt_ratio) / (sqrt_ratio * sqrt_ratio_upper).round(MAX_PRECISION))).floor
     end
 
     def calculate_amount_1(sqrt_ratio)
