@@ -3,5 +3,6 @@
 class Wallet < ActiveRecord::Base
   belongs_to :user
 
-  validates :address, presence: true, uniqueness: true
+  validates :address, :user, presence: true
+  validates :address, uniqueness: true
 end

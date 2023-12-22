@@ -2,18 +2,27 @@
 
 module Builders
   class PositionReport
-    def call(position_report)
+    def call(position_report) # rubocop:disable Metrics/MethodLength
       position_report.send_message
 
       case position_report.status.to_sym
+      when :initialized
+        process_initialized_report(position_report)
       when :fees_info_fetching
         process_fees_info_fetching_report(position_report)
       when :history_analyzing
         process_history_analyzing_report(position_report)
+      when :completed
+        call_portfolio_report_builder(position_report)
       end
     end
 
     private
+
+    def process_initialized_report(position_report)
+      position_report.update!(status: :fees_info_fetching)
+      call(position_report)
+    end
 
     def process_fees_info_fetching_report(position_report)
       position = position_report.position
@@ -54,6 +63,10 @@ module Builders
         initial_tick: pool['tick'],
         initial_timestamp: Time.at(initial_increase[:timestamp])
       }
+    end
+
+    def call_portfolio_report_builder(position_report)
+      PortfolioReport.new.call(position_report.position.portfolio_report)
     end
   end
 end

@@ -8,6 +8,7 @@ class PortfolioReport < ActiveRecord::Base
   has_many :positions, class_name: 'Reports::Position', dependent: :destroy
 
   validates :initial_message_id, uniqueness: true, allow_nil: true
+  validates :user, presence: true
 
   scope :in_process, -> { where(status: %i[positions_fetching prices_fetching events_fetching results_analyzing]) }
 

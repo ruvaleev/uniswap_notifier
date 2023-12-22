@@ -1,6 +1,6 @@
 en:
   portfolio_reports:
-    completed: Completed...
+    completed: 'Completed:'
     events_fetching: Events Fetching...
     failed: Failed (%{error_message})
     positions_fetching: Positions Fetching...
@@ -13,7 +13,7 @@ en:
       Total Fees Earned: $%{total_fees}
   position_reports:
     completed: |
-      %{uniswap_id}: (%{age_days}) days
+      %{uniswap_id}: (%{age_days} days)
       %{token_0_symbol}: %{token_0_amount} ~ $%{token_0_usd}
       %{token_1_symbol}: %{token_1_amount} ~ $%{token_1_usd}
       <u>Total USD value: $%{usd_value}</u>
@@ -29,4 +29,6 @@ en:
       %{uniswap_id}: Fees Info Fetching...
     history_analyzing: |
       %{uniswap_id}: History Analyzing...
+    initialized: |
+      %{uniswap_id}: Initialized...
 

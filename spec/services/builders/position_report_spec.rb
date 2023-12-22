@@ -28,15 +28,33 @@ RSpec.describe Builders::PositionReport do
 
       context 'when status: :completed' do
         let(:status) { :completed }
+        let(:portfolio_report_builder_double) { instance_double(Builders::PortfolioReport, call: true) }
+
+        before do
+          allow(Builders::PortfolioReport).to receive(:new).and_return(portfolio_report_builder_double)
+        end
 
         include_context 'with mocked position_report build_message service'
 
         it_behaves_like 'sends report'
         it_behaves_like "doesn't call itself recursively"
+
+        it 'calls Builders::PortfolioReport with position parent portfolio_report' do
+          call_service
+          expect(portfolio_report_builder_double).to have_received(:call).with(position.portfolio_report)
+        end
       end
     end
 
     context 'when report is in one of processing statuses' do
+      context 'when status: :initialized' do
+        let(:status) { :initialized }
+
+        it_behaves_like 'sends report'
+        it_behaves_like 'calls itself recursively'
+        it_behaves_like 'updates status to', 'fees_info_fetching'
+      end
+
       context 'when status: :fees_info_fetching' do # rubocop:disable RSpec/MultipleMemoizedHelpers
         let(:status) { :fees_info_fetching }
         let(:position_params) { { pool: { id: pool_address } } }

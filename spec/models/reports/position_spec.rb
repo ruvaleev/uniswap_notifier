@@ -10,6 +10,9 @@ RSpec.describe Reports::Position, type: :model do
   it { is_expected.to belong_to(:portfolio_report) }
   it { is_expected.to have_one(:position_report).dependent(:destroy) }
 
+  it { is_expected.to validate_presence_of(:portfolio_report) }
+  it { is_expected.to validate_uniqueness_of(:uniswap_id).scoped_to(:portfolio_report_id) }
+
   it { is_expected.to delegate_method(:usd_price).to(:portfolio_report) }
 
   describe '#age_days' do
@@ -125,7 +128,7 @@ RSpec.describe Reports::Position, type: :model do
     context 'when position has no report yet' do
       it 'creates and returns new report for position' do
         expect { report }.to change(PositionReport, :count).by(1)
-        expect(report).to have_attributes(position_id: position.id, status: 'fees_info_fetching')
+        expect(report).to have_attributes(position_id: position.id, status: 'initialized')
       end
     end
 

@@ -12,6 +12,7 @@ RSpec.describe PortfolioReport, type: :model do
   it { is_expected.to have_many(:positions).class_name('Reports::Position').dependent(:destroy) }
 
   it { is_expected.to validate_uniqueness_of(:initial_message_id).allow_nil }
+  it { is_expected.to validate_presence_of(:user) }
 
   describe '#claimed_fees' do
     subject(:claimed_fees) { portfolio_report.claimed_fees }

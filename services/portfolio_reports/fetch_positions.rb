@@ -25,11 +25,10 @@ module PortfolioReports
     end
 
     def call
-      return [] if addresses.empty?
+      return if addresses.empty?
 
       collection = api_service.positions(*addresses)['data']['positions']
-      result = save_positions(collection)
-      result.pluck('id')
+      save_positions(collection)
     end
 
     private
@@ -43,12 +42,19 @@ module PortfolioReports
       values = build_values(positions, *COLUMNS_MATCHES.values)
 
       <<-SQL.squish
-        INSERT INTO positions (#{columns})
-        VALUES #{values}
-        ON CONFLICT (uniswap_id, portfolio_report_id)
-        DO UPDATE SET
-          liquidity = EXCLUDED.liquidity
-        RETURNING id;
+        WITH inserted_positions AS (
+          INSERT INTO positions (#{columns})
+          VALUES #{values}
+          ON CONFLICT (uniswap_id, portfolio_report_id)
+          DO UPDATE SET
+            liquidity = EXCLUDED.liquidity
+          RETURNING id
+        )
+        INSERT INTO position_reports (position_id, created_at, updated_at)
+        SELECT id, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP FROM inserted_positions
+        WHERE NOT EXISTS (
+          SELECT 1 FROM position_reports WHERE position_id = inserted_positions.id
+        );
       SQL
     end
 

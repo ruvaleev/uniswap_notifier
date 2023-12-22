@@ -66,15 +66,19 @@ module Builders
     end
 
     def process_results_analyzing_report(portfolio_report)
-      threads = Reports::Position.where(portfolio_report_id: portfolio_report.id)
-                                 .find_each.with_object([]) do |pos, ar|
-        ar << Thread.new { PositionReport.new.call(pos.report) }
-      end
-      threads.each(&:join)
+      position_reports = ::PositionReport.joins(:position).where(position: { portfolio_report_id: portfolio_report.id })
+      to_process = position_reports.initialized
+      return schedule_position_reports(to_process) if to_process.any?
 
+      complete_report(portfolio_report) if position_reports.in_process.none?
+    end
+
+    def schedule_position_reports(position_reports)
+      position_reports.find_each { |report| BuildPositionReportWorker.perform_async(report.id) }
+    end
+
+    def complete_report(portfolio_report)
       portfolio_report.update!(status: :completed)
-      portfolio_report.positions.reload
-
       call(portfolio_report)
     end
   end

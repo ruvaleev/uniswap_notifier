@@ -4,6 +4,10 @@ class PositionReport < ActiveRecord::Base
   belongs_to :position, class_name: 'Reports::Position'
 
   validates :message_id, uniqueness: true, allow_nil: true
+  validates :position, presence: true, uniqueness: true
+
+  scope :in_process, -> { where(status: %i[fees_info_fetching history_analyzing]) }
+  scope :initialized, -> { where(status: :initialized) }
 
   def send_message
     result = message_service.call(message_id:, chat_id:, text:)

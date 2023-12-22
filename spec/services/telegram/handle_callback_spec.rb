@@ -28,7 +28,7 @@ RSpec.describe Telegram::HandleCallback do
       end
     end
 
-    context 'when there is other test in body' do
+    context 'when there is other text in body' do
       let(:callback_name) { :message_callback }
 
       it { is_expected.to be_nil }
@@ -38,6 +38,17 @@ RSpec.describe Telegram::HandleCallback do
       let(:callback_body) { {} }
 
       it { is_expected.to be_nil }
+    end
+
+    context 'when there is callback_query in the body' do
+      let(:callback_name) { 'callbacks/portfolio_report' }
+      let(:telegram_chat_id) { 999_887_755 } # from the fixture
+      let!(:user) { create(:user, telegram_chat_id:) }
+
+      it 'finds user with same chat id and asynchronously calls BuildPortfolioReportWorker for him' do
+        expect { call_service }.to change(BuildPortfolioReportWorker.jobs, :size).by(1)
+        expect(BuildPortfolioReportWorker.jobs.pluck('args')).to match_array([[user.id]])
+      end
     end
   end
 end

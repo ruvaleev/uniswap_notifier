@@ -51,15 +51,27 @@ RSpec.describe Telegram::Reports::SendOrUpdateMessage do
     end
 
     context 'when api returned error' do
-      let(:error_response) { File.read('spec/fixtures/telegram/bot_api/edit_message_text/error.json') }
+      let(:error_response) { File.read("spec/fixtures/telegram/bot_api/edit_message_text/#{fixture_name}.json") }
 
       before do
         stub_request(:post, %r{https://api\.telegram\.org/bot[^/]+/editMessageText})
           .to_return(status: 400, body: error_response)
       end
 
-      it 'raises error with proper message' do
-        expect { call_service }.to raise_error(Telegram::Bot::Exceptions::ResponseError)
+      context "when error is about 'message is not modified'" do
+        let(:fixture_name) { 'error_message_not_modified' }
+
+        it "doesn't raise any error" do
+          expect { call_service }.not_to raise_error
+        end
+      end
+
+      context 'when error is about anything else' do
+        let(:fixture_name) { 'error_message_text_is_empty' }
+
+        it 'raises error with proper message' do
+          expect { call_service }.to raise_error(Telegram::Bot::Exceptions::ResponseError)
+        end
       end
     end
   end

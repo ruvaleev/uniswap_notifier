@@ -2,8 +2,10 @@
 
 module Builders
   class PositionReport::Message # rubocop:disable Style/ClassAndModuleChildren
-    def call(report)
+    def call(report) # rubocop:disable Metrics/MethodLength
       case report.status.to_sym
+      when :initialized
+        initialized_message(report.position)
       when :fees_info_fetching
         fees_info_fetching_message(report.position)
       when :history_analyzing
@@ -16,6 +18,10 @@ module Builders
     end
 
     private
+
+    def initialized_message(position)
+      I18n.t('position_reports.initialized', uniswap_id: position.uniswap_id)
+    end
 
     def fees_info_fetching_message(position)
       I18n.t('position_reports.fees_info_fetching', uniswap_id: position.uniswap_id)

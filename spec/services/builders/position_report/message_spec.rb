@@ -14,6 +14,12 @@ RSpec.describe Builders::PositionReport::Message do
     let(:uniswap_id) { rand(10) }
     let(:position_params) { {} }
 
+    context 'when position_report has status: :initialized' do
+      let(:status) { :initialized }
+
+      it { is_expected.to eq(I18n.t('position_reports.initialized', uniswap_id:)) }
+    end
+
     context 'when position_report has status: :fees_info_fetching' do
       let(:status) { :fees_info_fetching }
 

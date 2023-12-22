@@ -123,12 +123,8 @@ RSpec.describe Builders::PortfolioReport do
         end
       end
 
-      context 'when status: :results_analyzing', :multithreaded do # rubocop:disable RSpec/MultipleMemoizedHelpers
+      context 'when status: :results_analyzing' do
         let(:status) { :results_analyzing }
-        let(:position_1) { create(:position, portfolio_report:) }
-        let!(:position_report_1) { create(:position_report, position: position_1) }
-        let(:position_2) { create(:position, portfolio_report:) }
-        let!(:position_report_2) { create(:position_report, position: position_2) }
         let(:position_report_builder_double) { instance_double(Builders::PositionReport, call: true) }
 
         before do
@@ -136,13 +132,47 @@ RSpec.describe Builders::PortfolioReport do
         end
 
         it_behaves_like 'sends report'
-        it_behaves_like 'calls itself recursively'
-        it_behaves_like 'updates status to', 'completed'
 
-        it 'calls Builders::PositionReport for each position' do
-          call_service
-          expect(position_report_builder_double).to have_received(:call).with(position_report_1).once
-          expect(position_report_builder_double).to have_received(:call).with(position_report_2).once
+        context 'when report has :initialized positions' do # rubocop:disable RSpec/MultipleMemoizedHelpers
+          let(:position_1) { create(:position, portfolio_report:) }
+          let!(:position_report_1) { create(:position_report, position: position_1, status: :initialized) }
+          let(:position_2) { create(:position, portfolio_report:) }
+          let!(:position_report_2) { create(:position_report, position: position_2, status: :initialized) }
+
+          it_behaves_like "doesn't call itself recursively"
+
+          it 'schedules BuildPositionReportWorker for each position' do
+            expect { call_service }.to change(BuildPositionReportWorker.jobs, :size).by(2)
+            expect(
+              BuildPositionReportWorker.jobs.pluck('args')
+            ).to match_array([[position_report_1.id], [position_report_2.id]])
+          end
+        end
+
+        context 'when report has no :initialized positions' do
+          let(:position) { create(:position, portfolio_report:) }
+          let!(:position_report) { create(:position_report, position:, status: position_report_status) } # rubocop:disable RSpec/LetSetup
+
+          context 'when existing position reports are in completed or failed status' do # rubocop:disable RSpec/MultipleMemoizedHelpers, RSpec/NestedGroups
+            let(:position_report_status) { :completed }
+
+            it_behaves_like 'calls itself recursively'
+            it_behaves_like 'updates status to', 'completed'
+
+            it "doesn't schedule BuildPositionReportWorker" do
+              expect { call_service }.not_to change(BuildPositionReportWorker.jobs, :size)
+            end
+          end
+
+          context 'when at least one of existing positions is still in process' do # rubocop:disable RSpec/MultipleMemoizedHelpers, RSpec/NestedGroups
+            let(:position_report_status) { :fees_info_fetching }
+
+            it_behaves_like "doesn't call itself recursively"
+
+            it "doesn't schedule BuildPositionReportWorker" do
+              expect { call_service }.not_to change(BuildPositionReportWorker.jobs, :size)
+            end
+          end
         end
       end
     end

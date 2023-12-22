@@ -17,7 +17,7 @@ class CreatePortfolioReports < ActiveRecord::Migration[7.0]
 
     create_table :portfolio_reports do |t|
       t.references :user, null: false, foreign_key: true
-      t.integer :initial_message_id
+      t.integer :initial_message_id, index: { unique: true }
       t.integer :summary_message_id
       t.jsonb :prices, null: false, default: {}
       t.string :error_message

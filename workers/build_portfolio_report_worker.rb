@@ -3,10 +3,8 @@
 class BuildPortfolioReportWorker
   include Sidekiq::Worker
 
-  DEFAULT_THRESHOLD = 10
-
   def perform(user_id)
     user = User.find(user_id)
-    Builders::PortfolioReport.new.call(user)
+    Builders::PortfolioReport.new.call(user.portfolio_report)
   end
 end

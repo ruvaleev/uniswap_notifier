@@ -11,6 +11,9 @@ module Reports
     belongs_to :portfolio_report
     has_one :position_report, dependent: :destroy
 
+    validates :portfolio_report, presence: true
+    validates :uniswap_id, uniqueness: { scope: :portfolio_report_id }
+
     delegate :usd_price, to: :portfolio_report
 
     def age_days

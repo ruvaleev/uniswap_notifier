@@ -17,7 +17,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_05_193042) do
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
   create_enum "portfolio_report_status", ["positions_fetching", "prices_fetching", "events_fetching", "results_analyzing", "completed", "failed"]
-  create_enum "position_report_status", ["fees_info_fetching", "history_analyzing", "completed", "failed"]
+  create_enum "position_report_status", ["initialized", "fees_info_fetching", "history_analyzing", "completed", "failed"]
 
   create_table "authentications", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -51,6 +51,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_05_193042) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.enum "status", default: "positions_fetching", null: false, enum_type: "portfolio_report_status"
+    t.index ["initial_message_id"], name: "index_portfolio_reports_on_initial_message_id", unique: true
     t.index ["user_id"], name: "index_portfolio_reports_on_user_id"
   end
 
@@ -60,8 +61,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_05_193042) do
     t.string "error_message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.enum "status", default: "fees_info_fetching", null: false, enum_type: "position_report_status"
-    t.index ["position_id"], name: "index_position_reports_on_position_id"
+    t.enum "status", default: "initialized", null: false, enum_type: "position_report_status"
+    t.index ["message_id"], name: "index_position_reports_on_message_id", unique: true
+    t.index ["position_id"], name: "index_position_reports_on_position_id", unique: true
   end
 
   create_table "positions", force: :cascade do |t|
@@ -93,6 +95,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_05_193042) do
     t.integer "telegram_chat_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["telegram_chat_id"], name: "index_users_on_telegram_chat_id"
   end
 
   create_table "wallets", force: :cascade do |t|

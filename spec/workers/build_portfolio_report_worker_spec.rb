@@ -10,6 +10,7 @@ RSpec.describe BuildPortfolioReportWorker do
     let(:user_id) { user.id }
     let(:user) { create(:user) }
     let(:builder_double) { instance_double(Builders::PortfolioReport, call: true) }
+    let(:portfolio_report) { create(:portfolio_report, status: :positions_fetching, user:) }
 
     before do
       allow(Builders::PortfolioReport).to receive(:new).and_return(builder_double)
@@ -17,9 +18,10 @@ RSpec.describe BuildPortfolioReportWorker do
 
     it_behaves_like 'sidekiq worker'
 
-    it 'calls Builders::PortfolioReport with user', testing: :inline do
+    it 'calls Builders::PortfolioReport with user portfolio_report', testing: :inline do
+      portfolio_report
       perform_worker
-      expect(builder_double).to have_received(:call).with(user).once
+      expect(builder_double).to have_received(:call).with(portfolio_report).once
     end
 
     context 'when there is no user with such id' do
