@@ -9,22 +9,23 @@ RSpec.describe Users::Authenticate do
     let(:address) { SecureRandom.hex }
     let(:ip_address) { "123.45.67.#{rand(100)}" }
 
-    context 'when there is no user with provided :address in db' do
-      it 'creates new user with provided :address' do
-        expect { call_service }.to change(User.where(address:), :count).by(1)
+    context 'when there is no wallet with provided :address in db' do
+      it 'creates new wallet with provided :address' do
+        expect { call_service }.to change(Wallet.where(address:), :count).by(1)
       end
 
       it 'creates new authentication with provided :ip_address for the new user and returns its token' do
         expect { call_service }.to change(Authentication, :count).by(1)
         authentication = Authentication.last
         expect(call_service).to eq(authentication.token)
-        expect(authentication.user.address).to eq(address)
+        expect(authentication.user.wallets.last).to have_attributes(address:)
         expect(authentication.ip_address).to eq(ip_address)
       end
     end
 
     context 'when there is already user with provided :address in db' do
-      let!(:user) { create(:user, address:) }
+      let(:wallet) { create(:wallet, address:) }
+      let!(:user) { wallet.user }
 
       it "doesn't create new user" do
         expect { call_service }.not_to change(User, :count)
@@ -34,7 +35,7 @@ RSpec.describe Users::Authenticate do
         expect { call_service }.to change(user.authentications, :count).by(1)
         authentication = user.authentications.last
         expect(call_service).to eq(authentication.token)
-        expect(authentication.user.address).to eq(address)
+        expect(authentication.user.wallets.last.address).to eq(address)
         expect(authentication.ip_address).to eq(ip_address)
       end
 

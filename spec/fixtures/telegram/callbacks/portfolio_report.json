@@ -1,0 +1,42 @@
+{
+  "update_id": 60494567,
+  "callback_query": {
+    "id": "2112516469859182640",
+    "from": {
+      "id": 999887755,
+      "is_bot": false,
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "username": "username",
+      "language_code": "en"
+    },
+    "message": {
+      "message_id": 2881,
+      "from": {
+        "id": 999887744,
+        "is_bot": true,
+        "first_name": "tg_bot_first_name",
+        "username": "tg_bot_username"
+      },
+      "chat": {
+        "id": 999887755,
+        "first_name": "First Name",
+        "last_name": "Last Name",
+        "username": "username",
+        "type": "private"
+      },
+      "date": 1687875824,
+      "text": "Choose command from menu",
+      "reply_markup": {
+        "inline_keyboard": [[
+          {
+            "text": "Portfolio Report",
+            "callback_data": "portfolio_report"
+          }
+        ]]
+      }
+    },
+    "chat_instance": "-3535629137956551658",
+    "data": "portfolio_report"
+  }
+}

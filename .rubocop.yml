@@ -20,12 +20,19 @@ Lint/AmbiguousBlockAssociation:
   Exclude:
     - spec/**/*
 
+Metrics/AbcSize:
+  Exclude:
+    - db/migrate/*
+
 Metrics/MethodLength:
   Exclude:
     - db/migrate/*
 
 MultipleExpectations:
   Enabled: false
+
+Naming/VariableNumber:
+  EnforcedStyle: snake_case
 
 RSpec/ExampleLength:
   Max: 10

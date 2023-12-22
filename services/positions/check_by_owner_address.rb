@@ -2,8 +2,6 @@
 
 module Positions
   class CheckByOwnerAddress
-    class NotFoundError < StandardError; end
-
     attr_reader :address, :threshold
 
     def initialize(address, threshold)
@@ -20,7 +18,7 @@ module Positions
 
     def notification_statuses
       @notification_statuses ||=
-        NotificationStatus.joins(:user).where(users: { address: })
+        NotificationStatus.joins(user: :wallets).where(wallets: { address: })
                           .select(:status, :uniswap_id).to_h { |rec| [rec.uniswap_id.to_s, rec.status] }
     end
 

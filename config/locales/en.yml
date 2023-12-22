@@ -1,0 +1,34 @@
+en:
+  portfolio_reports:
+    completed: 'Completed:'
+    events_fetching: Events Fetching...
+    failed: Failed (%{error_message})
+    positions_fetching: Positions Fetching...
+    prices_fetching: Prices Fetching...
+    results_analyzing: Results Analyzing...
+    summary_message: |
+      Total Portfolio Value (no fees): $%{usd_value}
+      Total Unclaimed Fees: $%{unclaimed_fees}
+      Total Claimed Fees: $%{claimed_fees}
+      Total Fees Earned: $%{total_fees}
+  position_reports:
+    completed: |
+      %{uniswap_id}: (%{age_days} days)
+      %{token_0_symbol}: %{token_0_amount} ~ $%{token_0_usd}
+      %{token_1_symbol}: %{token_1_amount} ~ $%{token_1_usd}
+      <u>Total USD value: $%{usd_value}</u>
+      Fees:
+      %{token_0_symbol}: %{token_0_fees} ~ $%{token_0_fees_usd};
+      %{token_1_symbol}: %{token_1_fees} ~ $%{token_1_fees_usd};
+      <u>Total Fees USD Value: $%{unclaimed_fees_earned}</u>
+      Expected APR: %{expected_apr}%
+      <u>Current IL: %{impermanent_loss_percent}% ($%{impermanent_loss})</u>
+    failed: |
+      %{uniswap_id}: Failed (%{error_message})
+    fees_info_fetching: |
+      %{uniswap_id}: Fees Info Fetching...
+    history_analyzing: |
+      %{uniswap_id}: History Analyzing...
+    initialized: |
+      %{uniswap_id}: Initialized...
+

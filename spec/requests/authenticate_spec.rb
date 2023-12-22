@@ -26,8 +26,9 @@ RSpec.describe 'POST /authenticate' do
       )
     end
 
-    context 'when there are this is the third authentication of this user already' do
-      let(:user) { create(:user, address:) }
+    context 'when there are this is the third authentication of this user already' do # rubocop:disable RSpec/MultipleMemoizedHelpers
+      let(:wallet) { create(:wallet, address:) }
+      let(:user) { wallet.user }
       let!(:oldest_authentication) { create(:authentication, user:, last_usage_at: Time.now - 86_400) }
       let!(:newest_authentication) { create(:authentication, user:, last_usage_at: Time.now) }
 

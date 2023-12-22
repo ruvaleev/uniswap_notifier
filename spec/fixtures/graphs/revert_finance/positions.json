@@ -20,28 +20,58 @@
         "tickUpper": "-200260",
         "withdrawnToken0": "0",
         "withdrawnToken1": "0",
-        "owner": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb0"
+        "owner": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb0",
+				"token0": {
+					"decimals": "18",
+					"id": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+					"symbol": "WETH"
+				},
+				"token1": {
+					"decimals": "6",
+					"id": "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+					"symbol": "USDC"
+				},
+        "pool": {
+					"id": "0xc6962004f452be9203591991d15f6b388e09e8d0",
+					"tick": "-200765",
+					"sqrtPrice": "3113456966182712215655822"
+				}
       },
-    {
-      "amountCollectedUSD": "0",
-      "amountDepositedUSD": "8302.632368364887969229217412107171",
-      "amountWithdrawnUSD": "0",
-      "collectedFeesToken0": "0",
-      "collectedFeesToken1": "0",
-      "collectedToken0": "0",
-      "collectedToken1": "0",
-      "depositedToken0": "2.093874190053694719",
-      "depositedToken1": "4137.645289",
-      "feeGrowthInside0LastX128": "78385468400655030670247336705936697821008",
-      "feeGrowthInside1LastX128": "133188508993072388072742577267544",
-      "id": "2",
-      "liquidity": "1908612923862013",
-      "tickLower": "-201360",
-      "tickUpper": "-199360",
-      "withdrawnToken0": "0",
-      "withdrawnToken1": "0",
-      "owner": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb0"
-    }
-  ]
-}
+      {
+        "amountCollectedUSD": "0",
+        "amountDepositedUSD": "8302.632368364887969229217412107171",
+        "amountWithdrawnUSD": "0",
+        "collectedFeesToken0": "0",
+        "collectedFeesToken1": "0",
+        "collectedToken0": "0",
+        "collectedToken1": "0",
+        "depositedToken0": "2.093874190053694719",
+        "depositedToken1": "4137.645289",
+        "feeGrowthInside0LastX128": "78385468400655030670247336705936697821008",
+        "feeGrowthInside1LastX128": "133188508993072388072742577267544",
+        "id": "2",
+        "liquidity": "1908612923862013",
+        "tickLower": "-201360",
+        "tickUpper": "-199360",
+        "withdrawnToken0": "0",
+        "withdrawnToken1": "0",
+        "owner": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb0",
+        "token0": {
+          "decimals": "18",
+          "id": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+          "symbol": "WETH"
+        },
+        "token1": {
+          "decimals": "18",
+          "id": "0x912ce59144191c1204e64559fe8253a0e49e6548",
+          "symbol": "ARB"
+        },
+        "pool": {
+          "id": "0xc6f780497a95e246eb9449f5e4770916dcd6396a",
+          "tick": "-201300",
+          "sqrtPrice": "3466610960857266939405161214604"
+        }
+      }
+    ]
+  }
 }

@@ -15,6 +15,9 @@ GEM
       public_suffix (>= 2.0.2, < 6.0)
     ast (2.4.2)
     bcrypt (3.1.18)
+    brpoplpush-redis_script (0.1.3)
+      concurrent-ruby (~> 1.0, >= 1.0.5)
+      redis (>= 1.0, < 6)
     bundle-audit (0.1.0)
       bundler-audit
     bundler-audit (0.9.1)
@@ -186,6 +189,11 @@ GEM
       rufus-scheduler (~> 3.2)
       sidekiq (>= 6, < 8)
       tilt (>= 1.4.0)
+    sidekiq-unique-jobs (8.0.5)
+      brpoplpush-redis_script (> 0.1.1, <= 2.0.0)
+      concurrent-ruby (~> 1.0, >= 1.0.5)
+      sidekiq (>= 7.0.0, < 8.0.0)
+      thor (>= 1.0, < 3.0)
     sinatra (3.0.6)
       mustermann (~> 3.0)
       rack (~> 2.2, >= 2.2.4)
@@ -228,6 +236,7 @@ DEPENDENCIES
   grpc (~> 1.55)
   grpc-tools
   httparty (>= 0.21.0)
+  i18n
   pg
   pry
   puma (>= 6.3.1)
@@ -244,6 +253,7 @@ DEPENDENCIES
   shoulda-matchers
   sidekiq (>= 7.1.3)
   sidekiq-scheduler
+  sidekiq-unique-jobs
   sinatra
   sinatra-activerecord
   strong_migrations

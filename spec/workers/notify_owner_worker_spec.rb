@@ -5,11 +5,11 @@ require_relative 'concerns/workers_shared_examples'
 
 RSpec.describe NotifyOwnerWorker do
   describe '#perform' do
-    subject(:perform_worker) { described_class.perform_async(address, uniswap_id, message_type) }
+    subject(:perform_worker) { described_class.perform_async(wallet.address, uniswap_id, message_type) }
 
     let(:user) { create(:user, telegram_chat_id: chat_id) }
-    let(:address) { user.address }
-    let(:chat_id) { rand(100).to_s }
+    let(:wallet) { create(:wallet, user:) }
+    let(:chat_id) { rand(100) }
     let(:uniswap_id) { rand(100) }
     let(:message_type) { 'out_of_range' }
     let(:message) { "Your position is OUT OF RANGE (needs rebalancing): https://app.uniswap.org/#/pools/#{uniswap_id}" }

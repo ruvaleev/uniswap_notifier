@@ -6,7 +6,8 @@ class NotifyOwnerWorker
   NOTIFICATION_TIMEOUT_SECONDS = 300
 
   def perform(address, uniswap_id, message_type)
-    user = User.find_by(address:)
+    wallet = Wallet.joins(:user).find_by(address:)
+    user = wallet.user
     chat_id = user.telegram_chat_id
     notification_status = user.notification_statuses.find_or_initialize_by(uniswap_id:)
     return if notification_status.status == message_type || already_sent?(notification_status)
