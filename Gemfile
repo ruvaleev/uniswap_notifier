@@ -19,6 +19,7 @@ gem 'redis'
 gem 'require_all'
 gem 'sidekiq', '>= 7.1.3'
 gem 'sidekiq-scheduler'
+gem 'sidekiq-unique-jobs'
 gem 'sinatra', require: false
 gem 'sinatra-activerecord'
 gem 'strong_migrations'

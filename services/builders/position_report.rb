@@ -66,7 +66,13 @@ module Builders
     end
 
     def call_portfolio_report_builder(position_report)
-      PortfolioReport.new.call(position_report.position.portfolio_report)
+      user_id =
+        ::PortfolioReport
+        .joins(:positions)
+        .where(positions: { id: position_report.position_id })
+        .limit(1)
+        .pluck(:user_id).first
+      BuildPortfolioReportWorker.perform_async(user_id)
     end
   end
 end

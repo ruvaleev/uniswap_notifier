@@ -28,11 +28,6 @@ RSpec.describe Builders::PositionReport do
 
       context 'when status: :completed' do
         let(:status) { :completed }
-        let(:portfolio_report_builder_double) { instance_double(Builders::PortfolioReport, call: true) }
-
-        before do
-          allow(Builders::PortfolioReport).to receive(:new).and_return(portfolio_report_builder_double)
-        end
 
         include_context 'with mocked position_report build_message service'
 
@@ -40,8 +35,8 @@ RSpec.describe Builders::PositionReport do
         it_behaves_like "doesn't call itself recursively"
 
         it 'calls Builders::PortfolioReport with position parent portfolio_report' do
-          call_service
-          expect(portfolio_report_builder_double).to have_received(:call).with(position.portfolio_report)
+          expect { call_service }.to change(BuildPortfolioReportWorker.jobs, :size).by(1)
+          expect(BuildPortfolioReportWorker.jobs.pluck('args')).to match_array([[position.portfolio_report.user_id]])
         end
       end
     end

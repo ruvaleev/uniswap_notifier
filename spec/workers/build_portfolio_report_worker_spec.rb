@@ -32,5 +32,12 @@ RSpec.describe BuildPortfolioReportWorker do
         expect(builder_double).not_to have_received(:call)
       end
     end
+
+    context 'when called two times with same arguments', testing: :inline do
+      it 'calls proper builder only one time' do
+        2.times { described_class.perform_async(user_id) }
+        expect(builder_double).to have_received(:call).once
+      end
+    end
   end
 end
