@@ -93,6 +93,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_05_193042) do
 
   create_table "users", force: :cascade do |t|
     t.integer "telegram_chat_id"
+    t.integer "menu_message_id"
+    t.string "locale", default: "en", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["telegram_chat_id"], name: "index_users_on_telegram_chat_id"
