@@ -1,4 +1,7 @@
 en:
+  initial_menu:
+    portfolio_report: Portfolio Report
+    text: 'You can launch one of the following commands:'
   portfolio_reports:
     completed: 'Completed:'
     events_fetching: Events Fetching...

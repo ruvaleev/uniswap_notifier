@@ -31,10 +31,11 @@ module Telegram
     end
 
     def start(token, chat_id)
-      user = User.find_by(id: RedisService.client.get(token))
+      user = User.find_by(id: RedisService.client.get(token)) || User.find_by(telegram_chat_id: chat_id)
       return unless user
 
       user.update(telegram_chat_id: chat_id)
+      SendInitialMenuWorker.perform_async(user.id)
     end
   end
 end

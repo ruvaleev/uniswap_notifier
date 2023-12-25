@@ -8,10 +8,17 @@ RSpec.describe Telegram::HandleCallback do
 
     let(:callback_body) { JSON.parse(File.read("spec/fixtures/telegram/#{callback_name}.json")) }
 
+    shared_examples 'schedules SendInitialMenuWorker for existing user' do
+      it 'schedules SendInitialMenuWorker for existing user' do
+        expect { call_service }.to change(SendInitialMenuWorker.jobs, :size).by(1)
+        expect(SendInitialMenuWorker.jobs.last['args']).to match_array([user.id])
+      end
+    end
+
     context 'when in body start callback' do
       let(:callback_name) { :start_callback }
       let(:token) { 'token_is_here' }
-      let!(:user) { create(:user) }
+      let(:user) { create(:user) }
 
       context 'when there is :user_id for provided token in cache' do
         before { RedisService.client.set(token, user.id) }
@@ -19,12 +26,24 @@ RSpec.describe Telegram::HandleCallback do
         it 'assigns chat_id to the user' do
           expect { call_service }.to change { user.reload.telegram_chat_id }.from(nil).to(999_887_755)
         end
+
+        it_behaves_like 'schedules SendInitialMenuWorker for existing user'
       end
 
       context 'when there is no :user_id for provided token in cache' do
         it "doesn't change user's :telegram_chat_id" do
           expect { call_service }.not_to change { user.reload.telegram_chat_id }
         end
+
+        it "doesn't schedules SendInitialMenuWorker" do
+          expect { call_service }.not_to change(SendInitialMenuWorker.jobs, :size)
+        end
+      end
+
+      context 'when there is already User with provided chat_id' do
+        let!(:user) { create(:user, telegram_chat_id: 999_887_755) } # rubocop:disable RSpec/LetSetup
+
+        it_behaves_like 'schedules SendInitialMenuWorker for existing user'
       end
     end
 

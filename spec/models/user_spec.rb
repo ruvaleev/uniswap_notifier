@@ -10,6 +10,8 @@ RSpec.describe User, type: :model do
   it { is_expected.to have_many(:portfolio_reports).dependent(:destroy) }
   it { is_expected.to have_many(:wallets).dependent(:destroy) }
 
+  it { is_expected.to validate_presence_of(:locale) }
+
   describe '#portfolio_report' do
     subject(:portfolio_report) { user.portfolio_report }
 
