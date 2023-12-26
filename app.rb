@@ -3,6 +3,8 @@
 require './config/environment'
 require 'sinatra'
 
+use Rollbar::Middleware::Sinatra
+
 set :show_exceptions, false
 
 error Authentications::NotFound do 401 end # rubocop:disable Style/BlockDelimiters
