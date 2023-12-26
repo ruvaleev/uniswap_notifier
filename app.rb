@@ -3,6 +3,8 @@
 require './config/environment'
 require 'sinatra'
 
+use Rollbar::Middleware::Sinatra
+
 set :show_exceptions, false
 
 error Authentications::NotFound do 401 end # rubocop:disable Style/BlockDelimiters
@@ -44,7 +46,7 @@ end
 
 post '/telegram_callback' do
   body = JSON.parse(request.body.read)
-  puts "BODY: #{body}"
+  Rollbar.info("BODY: #{body}")
   Telegram::HandleCallback.new.call(body)
   200
 end

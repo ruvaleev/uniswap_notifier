@@ -135,6 +135,7 @@ GEM
     regexp_parser (2.7.0)
     require_all (3.0.0)
     rexml (3.2.5)
+    rollbar (3.4.2)
     rspec (3.12.0)
       rspec-core (~> 3.12.0)
       rspec-expectations (~> 3.12.0)
@@ -244,6 +245,7 @@ DEPENDENCIES
   rake
   redis
   require_all
+  rollbar
   rspec
   rspec-sqlimit
   rubocop

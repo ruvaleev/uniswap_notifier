@@ -3,4 +3,12 @@
 ENV['RACK_ENV'] ||= 'development'
 
 require_relative 'config/environment'
+require 'rollbar/rake_tasks'
 require 'sinatra/activerecord/rake'
+
+desc 'Test Rollbar'
+task :environment do
+  Rollbar.configure do |config|
+    config.access_token = ENV.fetch('ROLLBAR_ACCESS_TOKEN', nil)
+  end
+end
