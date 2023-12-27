@@ -5,7 +5,7 @@ module Telegram
     def call(callback_body)
       if callback_body['callback_query']
         process_callback_query(callback_body['callback_query'])
-      elsif callback_body['message']
+      elsif callback_body['message'] && callback_body['message']['text']
         process_message(callback_body, callback_body['message']['text'])
       end
     end
