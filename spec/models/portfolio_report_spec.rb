@@ -45,13 +45,16 @@ RSpec.describe PortfolioReport, type: :model do
     it { is_expected.to eq('ARB: $1.17, BTC: $40000.15, WETH: $2000') }
   end
 
-  shared_examples 'sends message and writes its id to a proper field' do |id_field, message_builder_service|
+  shared_examples 'sends message and writes its id to a proper field' do |
+    id_field, message_builder_service, markup_builder_service = nil
+  |
     let(:portfolio_report) { build(:portfolio_report, user:, id_field => message_id) }
     let(:user) { build(:user, telegram_chat_id: chat_id) }
     let(:chat_id) { rand(100) }
     let(:message_id) { rand(100) }
     let(:text) { 'Some text' }
     let(:message_builder_double) { instance_double(message_builder_service, call: text) }
+    let(:reply_markup) { markup_builder_service&.new&.call(:en) }
     let(:send_message_service_double) { instance_double(Telegram::Reports::SendOrUpdateMessage, call: response) }
     let(:response) { JSON.parse(File.read('spec/fixtures/telegram/bot_api/send_message/success.json')) }
 
@@ -69,7 +72,7 @@ RSpec.describe PortfolioReport, type: :model do
         end.to change(portfolio_report, id_field).from(nil).to(2829) # from the fixture
         expect(
           send_message_service_double
-        ).to have_received(:call).with(chat_id:, message_id:, text:).once
+        ).to have_received(:call).with(chat_id:, message_id:, text:, reply_markup:).once
       end
     end
 
@@ -78,7 +81,7 @@ RSpec.describe PortfolioReport, type: :model do
         expect { subject }.not_to change(portfolio_report, id_field)
         expect(
           send_message_service_double
-        ).to have_received(:call).with(chat_id:, message_id:, text:).once
+        ).to have_received(:call).with(chat_id:, message_id:, text:, reply_markup:).once
       end
     end
   end
@@ -94,7 +97,9 @@ RSpec.describe PortfolioReport, type: :model do
     subject(:send_summary_message) { portfolio_report.send_summary_message }
 
     it_behaves_like 'sends message and writes its id to a proper field',
-                    :summary_message_id, Builders::PortfolioReport::SummaryMessage
+                    :summary_message_id,
+                    Builders::PortfolioReport::SummaryMessage,
+                    Builders::Telegram::ReplyMarkups::Menu
   end
 
   shared_context 'with prices and positions' do

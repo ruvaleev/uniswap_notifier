@@ -57,12 +57,14 @@ RSpec.describe Builders::PortfolioReport do
           expect(send_message_service_double).to have_received(:call).with(
             chat_id: user.telegram_chat_id,
             message_id: portfolio_report.initial_message_id,
-            text: initial_message_text
+            text: initial_message_text,
+            reply_markup: nil
           ).once
           expect(send_message_service_double).to have_received(:call).with(
             chat_id: user.telegram_chat_id,
             message_id: nil,
-            text: summary_message_text
+            text: summary_message_text,
+            reply_markup: Builders::Telegram::ReplyMarkups::Menu.new.call(:en)
           ).once
         end
       end

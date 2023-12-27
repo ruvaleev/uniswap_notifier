@@ -49,8 +49,28 @@ RSpec.describe Telegram::HandleCallback do
 
     context 'when there is other text in body' do
       let(:callback_name) { :message_callback }
+      let(:telegram_chat_id) { 999_887_755 } # from the fixture
+      let!(:user) { create(:user, telegram_chat_id:) }
 
       it { is_expected.to be_nil }
+
+      context 'when there is /portoflio_report in body' do
+        before { callback_body['message']['text'] = '/portfolio_report' }
+
+        it 'finds user with same chat id and asynchronously calls BuildPortfolioReportWorker for him' do
+          expect { call_service }.to change(BuildPortfolioReportWorker.jobs, :size).by(1)
+          expect(BuildPortfolioReportWorker.jobs.last['args']).to match_array([user.id])
+        end
+      end
+
+      context 'when there is /contact_us in body' do
+        before { callback_body['message']['text'] = '/contact_us' }
+
+        it 'sends link to current support manager' do
+          expect { call_service }.to change(SendSupportContactWorker.jobs, :size).by(1)
+          expect(SendSupportContactWorker.jobs.last['args']).to match_array([telegram_chat_id])
+        end
+      end
     end
 
     context 'when callback_body is empty' do
@@ -66,7 +86,7 @@ RSpec.describe Telegram::HandleCallback do
 
       it 'finds user with same chat id and asynchronously calls BuildPortfolioReportWorker for him' do
         expect { call_service }.to change(BuildPortfolioReportWorker.jobs, :size).by(1)
-        expect(BuildPortfolioReportWorker.jobs.pluck('args')).to match_array([[user.id]])
+        expect(BuildPortfolioReportWorker.jobs.last['args']).to match_array([user.id])
       end
     end
   end
