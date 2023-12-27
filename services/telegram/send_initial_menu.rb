@@ -14,9 +14,11 @@ module Telegram
     private
 
     def send_message(chat_id, locale)
-      text = I18n.t('initial_menu.text')
-      msg = api.send_message(chat_id:, text:, reply_markup: reply_markup(locale))
-      msg['result']['message_id']
+      SendMessage.new.call(
+        chat_id:,
+        text: I18n.t('initial_menu.text'),
+        reply_markup: reply_markup(locale)
+      )
     end
 
     def pin_message(chat_id, message_id)
@@ -28,13 +30,7 @@ module Telegram
     end
 
     def reply_markup(locale)
-      inline_keyboard = [[
-        Telegram::Bot::Types::InlineKeyboardButton.new(
-          text: I18n.t('initial_menu.portfolio_report', locale:),
-          callback_data: 'portfolio_report'
-        )
-      ]]
-      Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard:)
+      Builders::Telegram::ReplyMarkups::PinMessage.new.call(locale)
     end
   end
 end

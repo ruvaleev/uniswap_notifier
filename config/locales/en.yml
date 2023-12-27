@@ -1,7 +1,13 @@
 en:
   initial_menu:
+    text: |
+      Menu:
+      /portfolio_report
+      /contact_us
+  menu:
+    contact_us: Contact Us
     portfolio_report: Portfolio Report
-    text: 'You can launch one of the following commands:'
+    send_menu: Send Menu
   portfolio_reports:
     completed: 'Completed:'
     events_fetching: Events Fetching...

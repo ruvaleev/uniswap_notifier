@@ -6,19 +6,25 @@ module Telegram
       class NoChatId < StandardError; end
       class NoText < StandardError; end
 
-      def call(chat_id:, message_id:, text:)
+      def call(chat_id:, message_id:, text:, reply_markup: nil)
         raise NoChatId unless chat_id
         raise NoText unless text
 
         if message_id
-          TelegramNotifier.client.api.edit_message_text(chat_id:, message_id:, text:, parse_mode: :html)
+          api.edit_message_text(chat_id:, message_id:, text:, reply_markup:, parse_mode: :html)
         else
-          TelegramNotifier.client.api.send_message(chat_id:, text:, parse_mode: :html)
+          api.send_message(chat_id:, text:, reply_markup:, parse_mode: :html)
         end
       rescue Bot::Exceptions::ResponseError => e
         return if e.message.include?('Bad Request: message is not modified:')
 
         raise e
+      end
+
+      private
+
+      def api
+        @api ||= TelegramNotifier.client.api
       end
     end
   end

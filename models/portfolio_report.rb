@@ -25,7 +25,11 @@ class PortfolioReport < ActiveRecord::Base
   end
 
   def send_summary_message
-    send_message(text: summary_message_text, id_field: :summary_message_id)
+    send_message(
+      text: summary_message_text,
+      id_field: :summary_message_id,
+      reply_markup: Builders::Telegram::ReplyMarkups::Menu.new.call(user.locale)
+    )
   end
 
   def unclaimed_fees
@@ -58,9 +62,9 @@ class PortfolioReport < ActiveRecord::Base
     @message_service ||= Telegram::Reports::SendOrUpdateMessage.new
   end
 
-  def send_message(text:, id_field:)
+  def send_message(text:, id_field:, reply_markup: nil)
     message_id = public_send(id_field)
-    result = message_service.call(chat_id:, message_id:, text:)
+    result = message_service.call(chat_id:, message_id:, text:, reply_markup:)
     update!(id_field => result['result']['message_id']) unless message_id
   end
 
