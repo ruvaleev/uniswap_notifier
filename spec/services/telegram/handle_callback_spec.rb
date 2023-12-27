@@ -71,6 +71,15 @@ RSpec.describe Telegram::HandleCallback do
           expect(SendSupportContactWorker.jobs.last['args']).to match_array([telegram_chat_id])
         end
       end
+
+      context 'when there is /menu in body' do
+        before { callback_body['message']['text'] = '/menu' }
+
+        it 'sends menu' do
+          expect { call_service }.to change(SendMenuWorker.jobs, :size).by(1)
+          expect(SendMenuWorker.jobs.last['args']).to match_array([telegram_chat_id])
+        end
+      end
     end
 
     context 'when callback_body is empty' do
@@ -84,9 +93,20 @@ RSpec.describe Telegram::HandleCallback do
       let(:telegram_chat_id) { 999_887_755 } # from the fixture
       let!(:user) { create(:user, telegram_chat_id:) }
 
-      it 'finds user with same chat id and asynchronously calls BuildPortfolioReportWorker for him' do
-        expect { call_service }.to change(BuildPortfolioReportWorker.jobs, :size).by(1)
-        expect(BuildPortfolioReportWorker.jobs.last['args']).to match_array([user.id])
+      context "with 'portfolio_report' in data" do
+        it 'finds user with same chat id and asynchronously calls BuildPortfolioReportWorker for him' do
+          expect { call_service }.to change(BuildPortfolioReportWorker.jobs, :size).by(1)
+          expect(BuildPortfolioReportWorker.jobs.last['args']).to match_array([user.id])
+        end
+      end
+
+      context "with 'menu' in data" do
+        before { callback_body['callback_query']['data'] = 'menu' }
+
+        it 'sends menu' do
+          expect { call_service }.to change(SendMenuWorker.jobs, :size).by(1)
+          expect(SendMenuWorker.jobs.last['args']).to match_array([telegram_chat_id])
+        end
       end
     end
   end

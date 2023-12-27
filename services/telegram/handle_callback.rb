@@ -13,15 +13,12 @@ module Telegram
     private
 
     def process_callback_query(callback_query)
-      data = callback_query['data']
-
-      return unless data == 'portfolio_report'
-
-      telegram_chat_id = callback_query['message']['chat']['id']
-      user = User.find_by(telegram_chat_id:)
-      return unless user
-
-      BuildPortfolioReportWorker.perform_async(user.id)
+      case callback_query['data']
+      when 'portfolio_report'
+        portfolio_report(callback_query['message']['chat']['id'])
+      when 'menu'
+        menu(callback_query['message']['chat']['id'])
+      end
     end
 
     def process_message(callback_body, text)
@@ -33,6 +30,8 @@ module Telegram
         start(text.split.last, chat_id)
       elsif text.start_with?('/contact_us')
         contact_us(chat_id)
+      elsif text.start_with?('/menu')
+        menu(chat_id)
       end
     end
 
@@ -55,6 +54,10 @@ module Telegram
 
     def contact_us(chat_id)
       SendSupportContactWorker.perform_async(chat_id)
+    end
+
+    def menu(chat_id)
+      SendMenuWorker.perform_async(chat_id)
     end
   end
 end
