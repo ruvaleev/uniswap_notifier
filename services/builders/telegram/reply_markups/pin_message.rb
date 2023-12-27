@@ -10,7 +10,7 @@ module Builders
           [[
             ::Telegram::Bot::Types::InlineKeyboardButton.new(
               text: I18n.t('menu.send_menu', locale:),
-              callback_data: 'send_menu'
+              callback_data: 'menu'
             )
           ]]
         end

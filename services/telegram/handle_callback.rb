@@ -16,8 +16,8 @@ module Telegram
       case callback_query['data']
       when 'portfolio_report'
         portfolio_report(callback_query['message']['chat']['id'])
-      when 'send_menu'
-        send_menu(callback_query['message']['chat']['id'])
+      when 'menu'
+        menu(callback_query['message']['chat']['id'])
       end
     end
 
@@ -30,8 +30,8 @@ module Telegram
         start(text.split.last, chat_id)
       elsif text.start_with?('/contact_us')
         contact_us(chat_id)
-      elsif text.start_with?('/send_menu')
-        send_menu(chat_id)
+      elsif text.start_with?('/menu')
+        menu(chat_id)
       end
     end
 
@@ -56,7 +56,7 @@ module Telegram
       SendSupportContactWorker.perform_async(chat_id)
     end
 
-    def send_menu(chat_id)
+    def menu(chat_id)
       SendMenuWorker.perform_async(chat_id)
     end
   end

@@ -72,8 +72,8 @@ RSpec.describe Telegram::HandleCallback do
         end
       end
 
-      context 'when there is /send_menu in body' do
-        before { callback_body['message']['text'] = '/send_menu' }
+      context 'when there is /menu in body' do
+        before { callback_body['message']['text'] = '/menu' }
 
         it 'sends menu' do
           expect { call_service }.to change(SendMenuWorker.jobs, :size).by(1)
@@ -100,8 +100,8 @@ RSpec.describe Telegram::HandleCallback do
         end
       end
 
-      context "with 'send_menu' in data" do
-        before { callback_body['callback_query']['data'] = 'send_menu' }
+      context "with 'menu' in data" do
+        before { callback_body['callback_query']['data'] = 'menu' }
 
         it 'sends menu' do
           expect { call_service }.to change(SendMenuWorker.jobs, :size).by(1)
