@@ -14,9 +14,9 @@ RSpec.describe CheckTicksWorker do
     it_behaves_like 'sidekiq worker'
 
     context 'when there are users with telegram_chat_id', testing: :inline do
-      let(:user_1) { create(:user, telegram_chat_id: SecureRandom.hex) }
+      let(:user_1) { create(:user, telegram_chat_id: rand(1000)) }
       let!(:wallet_1) { create(:wallet, user: user_1) }
-      let(:user_2) { create(:user, telegram_chat_id: SecureRandom.hex) }
+      let(:user_2) { create(:user, telegram_chat_id: rand(1000)) }
       let!(:wallet_2) { create(:wallet, user: user_2) }
       let(:user_3) { create(:user, telegram_chat_id: nil) }
       let!(:wallet_3) { create(:wallet, user: user_3) } # rubocop:disable RSpec/LetSetup
