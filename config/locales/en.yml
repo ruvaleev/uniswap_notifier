@@ -5,6 +5,7 @@ en:
       /portfolio_report
       /contact_us
   menu:
+    choose_action: Choose Action
     contact_us: Contact Us
     portfolio_report: Portfolio Report
     send_menu: Send Menu
