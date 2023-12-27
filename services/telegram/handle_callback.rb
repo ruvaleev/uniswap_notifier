@@ -25,9 +25,15 @@ module Telegram
     end
 
     def process_message(callback_body, text)
-      return unless text.start_with?('/start')
+      chat_id = callback_body['message']['chat']['id']
 
-      start(text.split.last, callback_body['message']['chat']['id'])
+      if text.start_with?('/portfolio_report')
+        portfolio_report(chat_id)
+      elsif text.start_with?('/start')
+        start(text.split.last, chat_id)
+      elsif text.start_with?('/contact_us')
+        contact_us(chat_id)
+      end
     end
 
     def start(token, chat_id)
@@ -36,6 +42,19 @@ module Telegram
 
       user.update(telegram_chat_id: chat_id)
       SendInitialMenuWorker.perform_async(user.id)
+    end
+
+    def portfolio_report(telegram_chat_id)
+      return unless telegram_chat_id
+
+      user = User.find_by(telegram_chat_id:)
+      return unless user
+
+      BuildPortfolioReportWorker.perform_async(user.id)
+    end
+
+    def contact_us(chat_id)
+      SendSupportContactWorker.perform_async(chat_id)
     end
   end
 end
