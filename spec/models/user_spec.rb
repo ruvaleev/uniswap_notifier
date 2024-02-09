@@ -9,6 +9,7 @@ RSpec.describe User, type: :model do
   it { is_expected.to have_many(:notification_statuses).dependent(:destroy) }
   it { is_expected.to have_many(:portfolio_reports).dependent(:destroy) }
   it { is_expected.to have_many(:wallets).dependent(:destroy) }
+  it { is_expected.to have_one(:notifications_setting).dependent(:destroy) }
 
   it { is_expected.to validate_presence_of(:locale) }
 

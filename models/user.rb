@@ -6,6 +6,8 @@ class User < ActiveRecord::Base
   has_many :portfolio_reports, dependent: :destroy
   has_many :wallets, dependent: :destroy
 
+  has_one :notifications_setting, dependent: :destroy
+
   validates :locale, presence: true
 
   def portfolio_report
