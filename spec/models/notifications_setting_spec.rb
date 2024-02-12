@@ -7,7 +7,7 @@ RSpec.describe NotificationsSetting, type: :model do
 
   it { is_expected.to belong_to(:user) }
 
-  it { is_expected.to validate_presence_of(:out_of_range) }
+  it { is_expected.to validate_presence_of(:out_of_range).allow_blank }
   it { is_expected.to validate_presence_of(:user_id) }
   it { is_expected.to validate_uniqueness_of(:user_id) }
 end

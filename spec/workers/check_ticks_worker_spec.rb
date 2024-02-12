@@ -28,5 +28,31 @@ RSpec.describe CheckTicksWorker do
         expect(Positions::CheckByOwnerAddress).to have_received(:new).with(wallet_2.address, 0)
       end
     end
+
+    context 'when user has notifications_settings', testing: :inline do
+      let(:user) { create(:user, telegram_chat_id: rand(1000)) }
+      let!(:wallet) { create(:wallet, user:) }
+      let!(:notifications_setting) { create(:notifications_setting, user:, out_of_range:) } # rubocop:disable RSpec/LetSetup
+
+      context 'when :out_of_range setting is true' do
+        let(:out_of_range) { true }
+
+        it 'asynchronously checks user' do
+          perform_worker
+          expect(check_service_double).to have_received(:call).exactly(1).times
+          expect(Positions::CheckByOwnerAddress).to have_received(:new).with(wallet.address, 0)
+        end
+      end
+
+      context 'when :out_of_range setting is false' do
+        let(:out_of_range) { false }
+
+        it 'asynchronously checks user' do
+          perform_worker
+          expect(check_service_double).not_to have_received(:call)
+          expect(Positions::CheckByOwnerAddress).not_to have_received(:new)
+        end
+      end
+    end
   end
 end
