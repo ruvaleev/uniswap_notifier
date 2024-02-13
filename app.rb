@@ -8,6 +8,10 @@ use Rollbar::Middleware::Sinatra
 set :show_exceptions, false
 
 error Authentications::NotFound do 401 end # rubocop:disable Style/BlockDelimiters
+error ActiveRecord::RecordInvalid do |error|
+  status 422
+  { errors: error.record.errors.full_messages }.to_json
+end
 
 before do
   response.headers['Access-Control-Allow-Origin'] = allowed_origin
@@ -38,6 +42,10 @@ end
 patch '/clear_telegram' do
   Telegram::Delete.new.call(current_user)
   204
+end
+
+patch '/notifications_setting' do
+  NotificationsSettings::Update.new.call(current_user, params)
 end
 
 get '/telegram_link' do
