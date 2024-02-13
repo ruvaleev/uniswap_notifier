@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_05_193042) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_09_102813) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +40,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_05_193042) do
     t.index ["last_sent_at"], name: "index_notification_statuses_on_last_sent_at"
     t.index ["uniswap_id", "user_id"], name: "index_notification_statuses_on_uniswap_id_and_user_id", unique: true
     t.index ["user_id"], name: "index_notification_statuses_on_user_id"
+  end
+
+  create_table "notifications_settings", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.boolean "out_of_range", default: true, null: false
+    t.index ["user_id"], name: "index_notifications_settings_on_user_id", unique: true
   end
 
   create_table "portfolio_reports", force: :cascade do |t|
@@ -111,6 +117,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_05_193042) do
 
   add_foreign_key "authentications", "users"
   add_foreign_key "notification_statuses", "users"
+  add_foreign_key "notifications_settings", "users"
   add_foreign_key "portfolio_reports", "users"
   add_foreign_key "position_reports", "positions"
   add_foreign_key "positions", "portfolio_reports"

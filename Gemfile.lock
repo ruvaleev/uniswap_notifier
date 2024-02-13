@@ -79,9 +79,9 @@ GEM
       et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
     google-protobuf (3.23.0)
-    googleapis-common-protos-types (1.6.0)
-      google-protobuf (~> 3.14)
-    grpc (1.55.0)
+    googleapis-common-protos-types (1.11.0)
+      google-protobuf (~> 3.18)
+    grpc (1.56.2)
       google-protobuf (~> 3.23)
       googleapis-common-protos-types (~> 1.0)
     grpc-tools (1.54.2)
@@ -103,7 +103,7 @@ GEM
     multipart-post (2.3.0)
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
-    nio4r (2.6.1)
+    nio4r (2.7.0)
     openssl (3.1.0)
     parallel (1.22.1)
     parser (3.2.2.0)
@@ -114,7 +114,7 @@ GEM
       coderay (~> 1.1)
       method_source (~> 1.0)
     public_suffix (5.0.1)
-    puma (6.4.0)
+    puma (6.4.2)
       nio4r (~> 2.0)
     raabro (1.4.0)
     rack (2.2.6.4)
@@ -234,13 +234,13 @@ DEPENDENCIES
   eth
   factory_bot
   google-protobuf
-  grpc (~> 1.55)
+  grpc (~> 1.56.2)
   grpc-tools
   httparty (>= 0.21.0)
   i18n
   pg
   pry
-  puma (>= 6.3.1)
+  puma (>= 6.4.2)
   rack-test
   rake
   redis
